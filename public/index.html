@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ETF买入判断仪表盘</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">免费数据源 · 多源校验 · 数据失败不评分</p>
+      <h1>ETF买入判断仪表盘</h1>
+      <p class="subtitle">自动抓取免费行情，结合红利/非红利两套模型，给出建仓、观察或暂停判断建议。</p>
+    </div>
+    <div class="status-card">
+      <span id="serverStatus" class="dot"></span>
+      <div>
+        <strong>本地服务</strong>
+        <p id="serverStatusText">正在检测...</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls">
+      <h2>选择或输入ETF</h2>
+      <div class="chips" id="templateChips"></div>
+      <label class="field">
+        <span>ETF代码</span>
+        <input id="codeInput" value="159545" placeholder="例如 159545 / 513050 / VTI" />
+      </label>
+      <button id="analyzeBtn" class="primary">抓取并判断</button>
+      <button id="refreshAllBtn" class="secondary">刷新观察清单</button>
+      <div class="notice">
+        <strong>重要边界</strong>
+        <p>免费版不承诺交易所级实时。若数据源冲突、过期或不可用，工具会暂停评分，不会用缓存或示例数据冒充实时行情。</p>
+      </div>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="result-head">
+        <div>
+          <h2 id="etfTitle">等待分析</h2>
+          <p id="etfSub">请选择ETF后点击“抓取并判断”。</p>
+        </div>
+        <div class="score-ring" id="scoreRing"><span id="scoreValue">--</span><small>分</small></div>
+      </div>
+      <div class="verdict" id="verdict">暂无建议</div>
+      <div class="grid two">
+        <div class="metric"><span>最新价</span><strong id="price">--</strong></div>
+        <div class="metric"><span>涨跌幅</span><strong id="changePct">--</strong></div>
+        <div class="metric"><span>成交额</span><strong id="amount">--</strong></div>
+        <div class="metric"><span>52周价格分位</span><strong id="pricePct">--</strong></div>
+        <div class="metric"><span>近一年波动率</span><strong id="volatility">--</strong></div>
+        <div class="metric"><span>近一年最大回撤</span><strong id="drawdown">--</strong></div>
+      </div>
+      <div class="data-status" id="dataStatus">数据状态：--</div>
+      <div class="risk-tags" id="riskTags"></div>
+    </section>
+
+    <section class="panel wide">
+      <h2>是否推荐买入</h2>
+      <div id="recommendationDetails" class="recommendation-details empty">暂无数据</div>
+    </section>
+
+    <section class="panel wide">
+      <h2>核心数值</h2>
+      <div id="rawMetrics" class="raw-metrics empty">暂无数据</div>
+    </section>
+
+    <section class="panel">
+      <h2>评分拆解</h2>
+      <div id="components" class="components empty">暂无数据</div>
+    </section>
+
+    <section class="panel">
+      <h2>数据源校验</h2>
+      <div id="sources" class="sources empty">暂无数据</div>
+    </section>
+
+    <section class="panel wide">
+      <h2>观察清单</h2>
+      <div id="watchlist" class="watchlist"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>辅助决策工具，不构成投资建议。红利ETF重点看股息率/估值/分红可持续性；非红利ETF重点看估值分位/盈利趋势/波动/溢价。</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
