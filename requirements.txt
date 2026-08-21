@@ -1,0 +1,1 @@
+# No external Python packages required. The app uses Python standard library only.

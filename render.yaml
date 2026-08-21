@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: etf-decision-tool
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python backend/server.py"
+    envVars:
+      - key: ETF_TOOL_HOST
+        value: 0.0.0.0
