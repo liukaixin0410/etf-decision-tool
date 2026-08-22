@@ -3,7 +3,7 @@ from __future__ import annotations
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import parse_qs, urlparse
 
-from _common import load_templates, send_json
+from api_common import load_templates, send_json
 from data_sources import compute_history_metrics, get_history, now_iso, validated_quote
 from scoring import score_etf
 

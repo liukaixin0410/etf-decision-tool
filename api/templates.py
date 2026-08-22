@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-from _common import load_templates, send_json
+from api_common import load_templates, send_json
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
