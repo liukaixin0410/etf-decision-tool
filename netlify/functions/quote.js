@@ -1,7 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-const templates = JSON.parse(fs.readFileSync(path.join(__dirname, 'templates_data.json'), 'utf8'));
+const templates = require('./templates_data.json');
 const UA = 'Mozilla/5.0 ETFDecisionTool/1.0';
 
 function nowIso(){ return new Date().toISOString(); }
