@@ -1,0 +1,150 @@
+{
+  "159545": {
+    "code": "159545",
+    "name": "恒生红利低波ETF易方达",
+    "market": "cn_sz",
+    "type": "dividend_low_vol",
+    "tracking_index": "恒生港股通高股息低波动指数",
+    "is_qdii": false,
+    "is_cross_border": true,
+    "expense_ratio": 0.20,
+    "fund_size_billion": 6.9,
+    "manual_metrics": {
+      "dividend_yield": 6.04,
+      "dividend_yield_percentile": 70,
+      "pe_percentile": 25,
+      "pb_percentile": 30,
+      "sustainability_score": 70,
+      "tracking_error": null
+    },
+    "risk_tags": ["港股通", "红利行业集中", "分红不确定", "汇率影响"]
+  },
+  "513050": {
+    "code": "513050",
+    "name": "中概互联网ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证海外中国互联网50指数",
+    "is_qdii": true,
+    "is_cross_border": true,
+    "expense_ratio": 0.80,
+    "fund_size_billion": 37.0,
+    "manual_metrics": {
+      "valuation_percentile": 22,
+      "earnings_trend_score": 58,
+      "policy_risk_score": 45,
+      "tracking_error": null
+    },
+    "risk_tags": ["QDII净值滞后", "中概监管", "腾讯阿里集中度高", "汇率影响", "溢价风险"]
+  },
+  "513180": {
+    "code": "513180",
+    "name": "恒生科技ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "恒生科技指数",
+    "is_qdii": true,
+    "is_cross_border": true,
+    "expense_ratio": 0.65,
+    "fund_size_billion": 41.5,
+    "manual_metrics": {
+      "valuation_percentile": 45,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 50,
+      "tracking_error": null
+    },
+    "risk_tags": ["QDII净值滞后", "港股科技高波动", "和中概互联网重合", "汇率影响", "溢价风险"]
+  },
+  "VTI": {
+    "code": "VTI",
+    "name": "Vanguard Total Stock Market ETF",
+    "market": "us",
+    "type": "growth",
+    "tracking_index": "CRSP US Total Market Index",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.03,
+    "fund_size_billion": null,
+    "manual_metrics": {
+      "valuation_percentile": 60,
+      "earnings_trend_score": 68,
+      "policy_risk_score": 75,
+      "tracking_error": null
+    },
+    "risk_tags": ["美元资产", "美股估值不低", "汇率影响", "科技权重较高"]
+  },
+  "QQQM": {
+    "code": "QQQM",
+    "name": "Invesco NASDAQ 100 ETF",
+    "market": "us",
+    "type": "growth",
+    "tracking_index": "NASDAQ-100 Index",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.15,
+    "fund_size_billion": null,
+    "manual_metrics": {
+      "valuation_percentile": 70,
+      "earnings_trend_score": 72,
+      "policy_risk_score": 70,
+      "tracking_error": null
+    },
+    "risk_tags": ["美元资产", "纳指科技集中", "估值偏高风险", "汇率影响", "高波动"]
+  },
+  "520890": {
+    "code": "520890",
+    "name": "港股通红利低波ETF华泰柏瑞",
+    "market": "cn_sh",
+    "type": "dividend_low_vol",
+    "tracking_index": "恒生港股通高股息低波动指数",
+    "is_qdii": false,
+    "is_cross_border": true,
+    "expense_ratio": 0.60,
+    "fund_size_billion": 0.1,
+    "manual_metrics": {
+      "dividend_yield": 6.04,
+      "dividend_yield_percentile": 70,
+      "pe_percentile": 25,
+      "pb_percentile": 30,
+      "sustainability_score": 70,
+      "tracking_error": null
+    },
+    "risk_tags": ["基金规模偏小", "港股通", "红利行业集中", "分红不确定"]
+  },
+  "513220": {
+    "code": "513220",
+    "name": "中概互联ETF招商",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证全球中国互联网指数",
+    "is_qdii": true,
+    "is_cross_border": true,
+    "expense_ratio": 0.65,
+    "fund_size_billion": 0.49,
+    "manual_metrics": {
+      "valuation_percentile": 25,
+      "earnings_trend_score": 58,
+      "policy_risk_score": 45,
+      "tracking_error": null
+    },
+    "risk_tags": ["基金规模偏小", "QDII净值滞后", "中概监管", "汇率影响"]
+  },
+  "513130": {
+    "code": "513130",
+    "name": "恒生科技ETF华泰柏瑞",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "恒生科技指数",
+    "is_qdii": true,
+    "is_cross_border": true,
+    "expense_ratio": 0.65,
+    "fund_size_billion": 38.5,
+    "manual_metrics": {
+      "valuation_percentile": 45,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 50,
+      "tracking_error": null
+    },
+    "risk_tags": ["QDII净值滞后", "港股科技高波动", "汇率影响", "溢价风险"]
+  }
+}
