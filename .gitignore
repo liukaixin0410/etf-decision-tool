@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 backend/cache/
 .vercel
+
+# Local Netlify folder
+.netlify
