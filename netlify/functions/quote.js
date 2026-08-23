@@ -90,7 +90,7 @@ function dataPenalty(st){ if(st==='trusted') return 0; if(st==='single_source') 
 function weighted(items){ const tw=items.reduce((a,x)=>a+x[1],0); return items.reduce((a,x)=>a+x[0]*x[1],0)/tw; }
 function buildScore(template, quote, hist){
   const mm = template.manual_metrics || {}; const primary = quote.primary || {}; const st=quote.status; let comps, base;
-  if(template.type === 'dividend_low_vol'){
+  if(['dividend_low_vol','dividend'].includes(template.type)){
     const dy = mm.dividend_yield == null ? 50 : Math.max(0, Math.min(100, (mm.dividend_yield-2)/6*100));
     const val = (inv(mm.pe_percentile)+inv(mm.pb_percentile))/2;
     comps = {'股息率水平':dy,'股息率分位':mm.dividend_yield_percentile??45,'PE/PB估值分位':val,'52周价格分位':scorePricePercentile(hist.price_percentile_52w),'分红可持续性':mm.sustainability_score??55,'基金规模':scoreSize(template.fund_size_billion),'成交额流动性':scoreAmount(primary.amount),'折溢价':55,'费率':scoreExp(template.expense_ratio),'数据可信度':100-dataPenalty(st)};
