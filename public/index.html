@@ -38,6 +38,24 @@
       </div>
     </section>
 
+    <section class="panel wide pool-panel" id="poolRankPanel">
+      <div class="pool-head">
+        <div>
+          <h2>ETF池排行</h2>
+          <p>按当前评分降序排列；可切换核心池/扩展池，也可按类别筛选。</p>
+        </div>
+        <button id="scanPoolBtn" class="primary compact-btn">扫描并排序</button>
+      </div>
+      <div class="pool-filters">
+        <label><span>ETF池</span><select id="poolFilter"><option value="all">全部</option><option value="core">核心池</option><option value="extended">扩展池</option></select></label>
+        <label><span>类别</span><select id="categoryFilter"><option value="all">全部类别</option></select></label>
+        <label><span>推荐程度</span><select id="recommendFilter"><option value="all">全部</option><option value="buy">可买/小底仓以上</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
+        <label><span>搜索</span><input id="poolSearch" placeholder="代码/名称/指数" /></label>
+      </div>
+      <div id="poolSummary" class="pool-summary">点击“扫描并排序”后，系统会拉取当前行情并按评分排序。</div>
+      <div id="poolRankList" class="pool-rank-list empty">暂无排行数据</div>
+    </section>
+
     <section class="panel result-panel">
       <div class="result-head">
         <div>

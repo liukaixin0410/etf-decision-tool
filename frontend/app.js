@@ -1,6 +1,8 @@
 const $ = (id) => document.getElementById(id);
 let templates = {};
 let currentCode = '159545';
+let poolResults = [];
+let scanningPool = false;
 
 function fmtNumber(n, digits = 3) {
   if (n === null || n === undefined || Number.isNaN(Number(n))) return '--';
@@ -32,6 +34,23 @@ function displayType(type) {
   if (type === 'dividend') return '红利/高股息';
   if (type === 'broad') return '宽基';
   return '非红利/成长';
+}
+function categoryOf(t) {
+  return t.category || displayType(t.type);
+}
+function poolOf(t) {
+  return t.pool || 'core';
+}
+function recommendationBucket(score, status) {
+  if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
+  if (score >= 65) return 'buy';
+  return 'watch';
+}
+function shortReason(data) {
+  const rc = buildReasons(data);
+  const firstReason = rc.reasons[0] || '暂无明显推荐理由';
+  const firstCaution = rc.cautions[0] || '暂无主要谨慎点';
+  return `${firstReason} / ${firstCaution}`;
 }
 function metricItem(label, value, note = '') {
   return `<div class="raw-item"><span>${label}</span><strong>${value}</strong>${note ? `<small>${note}</small>` : ''}</div>`;
@@ -191,19 +210,35 @@ async function loadTemplates() {
 function renderChips() {
   const root = $('templateChips');
   root.innerHTML = '';
-  Object.values(templates).forEach(t => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `chip ${t.code === currentCode ? 'active' : ''}`;
-    btn.textContent = t.code;
-    btn.title = t.name;
-    btn.onclick = () => {
-      currentCode = t.code;
-      $('codeInput').value = t.code;
-      renderChips();
-    };
-    root.appendChild(btn);
-  });
+  Object.values(templates)
+    .filter(t => poolOf(t) === 'core')
+    .slice(0, 40)
+    .forEach(t => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `chip ${t.code === currentCode ? 'active' : ''}`;
+      btn.textContent = t.code;
+      btn.title = `${t.name} · ${categoryOf(t)}`;
+      btn.onclick = () => {
+        currentCode = t.code;
+        $('codeInput').value = t.code;
+        renderChips();
+      };
+      root.appendChild(btn);
+    });
+  renderCategoryOptions();
+}
+function renderCategoryOptions() {
+  const select = $('categoryFilter');
+  if (!select || select.dataset.ready === '1') return;
+  const categories = Array.from(new Set(Object.values(templates).map(categoryOf))).sort();
+  for (const c of categories) {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    select.appendChild(opt);
+  }
+  select.dataset.ready = '1';
 }
 function setScore(score) {
   const val = Number(score);
@@ -382,8 +417,108 @@ async function renderWatchlist() {
     root.innerHTML = `<div class="empty">观察清单读取失败：${e.message}</div>`;
   }
 }
+function filteredTemplates() {
+  const pool = $('poolFilter')?.value || 'all';
+  const cat = $('categoryFilter')?.value || 'all';
+  const text = ($('poolSearch')?.value || '').trim().toLowerCase();
+  return Object.values(templates).filter(t => {
+    if (pool !== 'all' && poolOf(t) !== pool) return false;
+    if (cat !== 'all' && categoryOf(t) !== cat) return false;
+    if (text) {
+      const hay = `${t.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  });
+}
+function renderPoolRankList(items = poolResults) {
+  const root = $('poolRankList');
+  const summary = $('poolSummary');
+  if (!root) return;
+  const pool = $('poolFilter')?.value || 'all';
+  const cat = $('categoryFilter')?.value || 'all';
+  const rec = $('recommendFilter')?.value || 'all';
+  const text = ($('poolSearch')?.value || '').trim().toLowerCase();
+  let list = items.filter(d => {
+    const t = d.template || {};
+    const s = d.score || {};
+    const bucket = recommendationBucket(Number(s.score || 0), d.quote?.status);
+    if (pool !== 'all' && poolOf(t) !== pool) return false;
+    if (cat !== 'all' && categoryOf(t) !== cat) return false;
+    if (rec !== 'all' && bucket !== rec) return false;
+    if (text) {
+      const hay = `${d.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  }).sort((a,b) => Number(b.score?.score || 0) - Number(a.score?.score || 0));
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${poolResults.length || Object.keys(templates).length} 只；按评分降序排列。`;
+  if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = scanningPool ? '正在扫描...' : '暂无符合条件的数据'; return; }
+  root.className = 'pool-rank-list';
+  root.innerHTML = list.map((d, idx) => {
+    const t = d.template || {};
+    const q = d.quote || {};
+    const p = q.primary || {};
+    const h = d.history_metrics || {};
+    const s = d.score || {};
+    const score = Number(s.score || 0);
+    const degree = recommendationDegree(score, q.status);
+    const badge = poolOf(t) === 'core' ? '核心' : '扩展';
+    return `<button class="rank-card" data-code="${d.code}">
+      <div class="rank-no">#${idx + 1}</div>
+      <div class="rank-main">
+        <div class="rank-title"><strong>${d.code}</strong><span>${t.name || ''}</span></div>
+        <div class="rank-sub">${categoryOf(t)} · ${t.tracking_index || '未配置指数'} · ${badge}</div>
+        <div class="rank-reason">${shortReason(d)}</div>
+      </div>
+      <div class="rank-metrics">
+        <span class="score-badge ${degree.cls}">${fmtNumber(score,1)}</span>
+        <span>${degree.label}</span>
+        <small>价:${fmtNumber(p.price,3)} · 分位:${fmtPct(h.price_percentile_52w,1)} · 数据:${q.status || '--'}</small>
+      </div>
+    </button>`;
+  }).join('');
+  root.querySelectorAll('.rank-card').forEach(btn => {
+    btn.onclick = () => {
+      const code = btn.dataset.code;
+      const data = poolResults.find(x => x.code === code);
+      if (data) {
+        currentCode = code;
+        $('codeInput').value = code;
+        renderResult(data);
+        renderChips();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+    };
+  });
+}
+async function scanPool() {
+  if (scanningPool) return;
+  scanningPool = true;
+  poolResults = [];
+  const targets = filteredTemplates();
+  const root = $('poolRankList');
+  const summary = $('poolSummary');
+  if (root) { root.className = 'pool-rank-list empty'; root.textContent = '正在扫描ETF池...'; }
+  for (let i = 0; i < targets.length; i++) {
+    const t = targets[i];
+    if (summary) summary.textContent = `正在扫描 ${i + 1} / ${targets.length}：${t.code} ${t.name}`;
+    try {
+      const data = await api(`/api/quote?code=${encodeURIComponent(t.code)}`);
+      poolResults.push(data);
+      renderPoolRankList(poolResults);
+    } catch (e) {
+      poolResults.push({code: t.code, template: t, quote: {status:'unavailable', reason:e.message}, history_metrics: {}, score: {score:0, level:'暂停判断', action:e.message, risk_tags:['抓取失败']}});
+    }
+  }
+  scanningPool = false;
+  renderPoolRankList(poolResults);
+}
+
 $('analyzeBtn').onclick = () => analyze($('codeInput').value);
 $('refreshAllBtn').onclick = renderWatchlist;
+$('scanPoolBtn').onclick = scanPool;
+['poolFilter','categoryFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
