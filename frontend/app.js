@@ -27,6 +27,12 @@ function fmtMaybeNumber(n, digits = 2, suffix = '') {
 function fmtBool(v) {
   return v ? '是' : '否';
 }
+function displayType(type) {
+  if (type === 'dividend_low_vol') return '红利低波';
+  if (type === 'dividend') return '红利/高股息';
+  if (type === 'broad') return '宽基';
+  return '非红利/成长';
+}
 function metricItem(label, value, note = '') {
   return `<div class="raw-item"><span>${label}</span><strong>${value}</strong>${note ? `<small>${note}</small>` : ''}</div>`;
 }
@@ -35,10 +41,14 @@ function getPeerGroup(code, t) {
   const c = String(code || '').toUpperCase();
   const index = t.tracking_index || '';
   if (['159545', '520890', '513630'].includes(c) || index.includes('高股息低波') || index.includes('低波红利')) return ['159545', '513630', '520890'];
+  if (['510880', '515080', '159581', '512800', 'SCHD'].includes(c) || index.includes('红利') || index.includes('Dividend') || index.includes('银行')) return ['510880', '515080', '159581', '512800', 'SCHD'];
   if (['513050', '513220'].includes(c) || index.includes('中国互联网')) return ['513050', '513220'];
   if (['513180', '513130'].includes(c) || index.includes('恒生科技')) return ['513180', '513130'];
-  if (['VTI', 'VOO', 'SPY', 'IVV'].includes(c) || index.includes('Total Market') || index.includes('S&P')) return ['VTI', 'VOO'];
-  if (['QQQM', 'QQQ'].includes(c) || index.includes('NASDAQ')) return ['QQQM', 'QQQ'];
+  if (['510300','159919','510050','510500','512100'].includes(c) || index.includes('沪深300') || index.includes('上证50') || index.includes('中证500') || index.includes('中证1000')) return ['510300','159919','510050','510500','512100'];
+  if (['VTI', 'VOO', 'SPY', 'IVV', '513500'].includes(c) || index.includes('Total Market') || index.includes('S&P') || index.includes('标普500')) return ['VTI', 'VOO', 'SPY', 'IVV', '513500'];
+  if (['QQQM', 'QQQ', '513100', '159941'].includes(c) || index.includes('NASDAQ') || index.includes('纳斯达克')) return ['QQQM', 'QQQ', '513100', '159941'];
+  if (['159915','588000','588200','512480','512760','515000','159995'].includes(c) || index.includes('创业板') || index.includes('科创') || index.includes('半导体') || index.includes('芯片') || index.includes('科技龙头')) return ['159915','588000','588200','512480','512760','515000','159995'];
+  if (['513330','513060','159740'].includes(c) || index.includes('恒生互联网') || index.includes('医疗')) return ['513330','513060','159740','513180','513130'];
   return [c];
 }
 function comparisonSummary(code) {
@@ -52,7 +62,30 @@ function comparisonSummary(code) {
     '513180': '同指数对比513130：两者都跟踪恒生科技指数，513180规模通常更大，作为恒生科技弹性仓略优先。',
     '513130': '同指数对比513180：两者底层接近，513130可以用，但若只选一只，513180通常更优先。',
     'VTI': '同类对比VOO：VTI覆盖美国全市场，分散度更高；VOO更集中于标普500大盘龙头。当前若已有科技仓，VTI更适合作为美股底座。',
-    'QQQM': '同类对比QQQ：QQQM同样跟踪纳斯达克100，费率通常更低，更适合长期持有；但科技集中和估值风险仍高。'
+    'QQQM': '同类对比QQQ：QQQM同样跟踪纳斯达克100，费率通常更低，更适合长期持有；但科技集中和估值风险仍高。',
+    '510300': '同类对比159919：同跟踪沪深300，优先比较规模、成交额、费率和折溢价；沪深300适合做A股大盘核心底仓。',
+    '159919': '同类对比510300：同跟踪沪深300，差异主要在交易所、规模、成交额、费率和折溢价。',
+    '510050': '同类对比沪深300：上证50更集中于超大盘蓝筹和金融权重，防守属性更强。',
+    '510500': '同类对比沪深300/中证1000：中证500偏中盘，弹性和波动通常高于沪深300。',
+    '512100': '同类对比中证500：中证1000更偏小盘，弹性更强但波动也更高，仓位应更保守。',
+    '159915': '同类对比科创/芯片：创业板覆盖成长资产，行业分布更宽；芯片/半导体ETF更集中。',
+    '588000': '同类对比创业板：科创50更偏硬科技和科创板公司，波动较高，适合小比例弹性仓。',
+    '588200': '同类对比512480/512760/159995：都偏芯片半导体，重点比较规模、成交额和跟踪指数。',
+    '512480': '同类对比512760/159995/588200：同属芯片半导体方向，行业集中度高，不适合重仓单押。',
+    '512760': '同类对比512480/159995：芯片主题ETF高度相关，通常选一只流动性和费率更好的即可。',
+    '515000': '同类对比创业板/科创50：科技龙头比芯片ETF分散一些，但仍是成长高波动方向。',
+    '159995': '同类对比512480/512760：芯片ETF之间高度相似，优先选规模、成交额、折溢价更好的。',
+    '512800': '同类对比红利ETF：银行ETF股息属性强但行业极度集中，不能替代分散红利ETF。',
+    '510880': '同类对比515080/159581：上证红利偏A股高股息，和红利低波相比波动过滤较弱。',
+    '515080': '同类对比510880/159581：中证红利覆盖更广，适合A股红利配置；仍需看行业集中和股息可持续。',
+    '159581': '同类对比普通红利ETF：红利低波多了一层波动筛选，通常更偏防守。',
+    '513100': '同类对比QQQM/QQQ/159941：都是纳指100方向；境内QDII有净值滞后和溢价风险。',
+    '159941': '同类对比513100：同为境内纳指ETF，重点看溢价、成交额和费率。',
+    '513500': '同类对比VOO/SPY/IVV：都是标普500方向；境内ETF有QDII溢价和汇率换算问题。',
+    '513330': '同类对比513050/513220：恒生互联网更偏港股互联网，和中概互联网高度相关。',
+    '513060': '同类对比科技/互联网ETF：恒生医疗是医药方向，受政策、集采、研发周期影响更大。',
+    '159740': '同类对比513180/513130：同跟踪恒生科技，差异主要在交易所、规模、成交额、费率和折溢价。',
+    'SCHD': '同类对比港股/A股红利：SCHD是美股红利质量方向，分红质量和美元资产属性更强，但股息率通常低于港股红利。'
   };
   return map[c] || '暂无内置同类对比。后续可在模板中补充同指数/同类ETF。';
 }
@@ -189,7 +222,7 @@ function renderResult(data) {
   const h = data.history_metrics || {};
   const s = data.score || {};
   $('etfTitle').textContent = `${data.code} ${t.name || ''}`;
-  $('etfSub').textContent = `${t.tracking_index || '未配置指数'} · ${t.type === 'dividend_low_vol' ? '红利低波' : '非红利/成长'} · ${t.is_qdii ? 'QDII/跨境' : '普通/非QDII'}`;
+  $('etfSub').textContent = `${t.tracking_index || '未配置指数'} · ${displayType(t.type)} · ${t.is_qdii ? 'QDII/跨境' : '普通/非QDII'}`;
   setScore(s.score);
   $('verdict').textContent = `${s.level || '--'}：${s.action || ''}`;
   $('price').textContent = fmtNumber(p.price, 3);
@@ -226,7 +259,7 @@ function renderRawMetrics(data) {
   const p = q.primary || {};
   const h = data.history_metrics || {};
   const mm = t.manual_metrics || {};
-  const isDividend = t.type === 'dividend_low_vol';
+  const isDividend = ['dividend_low_vol', 'dividend'].includes(t.type);
   const rows = [];
 
   rows.push(metricItem('ETF代码', data.code || '--', t.name || ''));

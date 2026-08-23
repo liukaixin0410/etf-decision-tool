@@ -237,6 +237,6 @@ def build_result(score: float, components: Dict[str, float], template: Dict[str,
 
 
 def score_etf(template: Dict[str, Any], quote: Dict[str, Any], hist: Dict[str, Any], overrides: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    if template.get("type") == "dividend_low_vol":
+    if template.get("type") in {"dividend_low_vol", "dividend"}:
         return score_dividend(template, quote, hist, overrides)
     return score_growth(template, quote, hist, overrides)
