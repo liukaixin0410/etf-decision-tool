@@ -550,6 +550,8 @@ async function scanPool() {
 $('analyzeBtn').onclick = () => analyze($('codeInput').value);
 $('refreshAllBtn').onclick = renderWatchlist;
 $('scanPoolBtn').onclick = scanPool;
+$('rankPageBtn').onclick = () => switchPage('rank');
+$('detailPageBtn').onclick = () => switchPage('detail');
 ['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
