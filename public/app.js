@@ -232,24 +232,7 @@ async function loadTemplates() {
   }
 }
 function renderChips() {
-  const root = $('templateChips');
-  root.innerHTML = '';
-  Object.values(templates)
-    .filter(t => poolOf(t) === 'core')
-    .slice(0, 40)
-    .forEach(t => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = `chip ${t.code === currentCode ? 'active' : ''}`;
-      btn.textContent = t.code;
-      btn.title = `${t.name} · ${categoryOf(t)}`;
-      btn.onclick = () => {
-        currentCode = t.code;
-        $('codeInput').value = t.code;
-        renderChips();
-      };
-      root.appendChild(btn);
-    });
+  // 顶部快捷ETF代码列表已移除；保留函数用于刷新类别筛选项。
   renderCategoryOptions();
 }
 function renderCategoryOptions() {
