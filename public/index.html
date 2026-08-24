@@ -22,6 +22,11 @@
     </div>
   </header>
 
+  <nav class="page-tabs">
+    <button id="rankPageBtn" class="page-tab active" type="button">ETF池排行</button>
+    <button id="detailPageBtn" class="page-tab" type="button">单只ETF详情</button>
+  </nav>
+
   <main class="layout">
     <section class="panel controls">
       <h2>选择或输入ETF</h2>
@@ -38,7 +43,7 @@
       </div>
     </section>
 
-    <section class="panel wide pool-panel" id="poolRankPanel">
+    <section class="panel wide pool-panel page-section rank-page" id="poolRankPanel">
       <div class="pool-head">
         <div>
           <h2>ETF池排行</h2>
@@ -49,6 +54,8 @@
       <div class="pool-filters">
         <label><span>ETF池</span><select id="poolFilter"><option value="all">全部</option><option value="core">核心池</option><option value="extended">扩展池</option></select></label>
         <label><span>类别</span><select id="categoryFilter"><option value="all">全部类别</option></select></label>
+        <label><span>市场</span><select id="marketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>评分</span><select id="scoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="50">50-65分</option><option value="0">50分以下/暂停</option></select></label>
         <label><span>推荐程度</span><select id="recommendFilter"><option value="all">全部</option><option value="buy">可买/小底仓以上</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
         <label><span>搜索</span><input id="poolSearch" placeholder="代码/名称/指数" /></label>
       </div>
@@ -56,7 +63,7 @@
       <div id="poolRankList" class="pool-rank-list empty">暂无排行数据</div>
     </section>
 
-    <section class="panel result-panel">
+    <section class="panel result-panel page-section detail-page">
       <div class="result-head">
         <div>
           <h2 id="etfTitle">等待分析</h2>
@@ -77,27 +84,27 @@
       <div class="risk-tags" id="riskTags"></div>
     </section>
 
-    <section class="panel wide">
+    <section class="panel wide page-section detail-page">
       <h2>是否推荐买入</h2>
       <div id="recommendationDetails" class="recommendation-details empty">暂无数据</div>
     </section>
 
-    <section class="panel wide">
+    <section class="panel wide page-section detail-page">
       <h2>核心数值</h2>
       <div id="rawMetrics" class="raw-metrics empty">暂无数据</div>
     </section>
 
-    <section class="panel">
+    <section class="panel page-section detail-page">
       <h2>评分拆解</h2>
       <div id="components" class="components empty">暂无数据</div>
     </section>
 
-    <section class="panel">
+    <section class="panel page-section detail-page">
       <h2>数据源校验</h2>
       <div id="sources" class="sources empty">暂无数据</div>
     </section>
 
-    <section class="panel wide">
+    <section class="panel wide page-section detail-page">
       <h2>观察清单</h2>
       <div id="watchlist" class="watchlist"></div>
     </section>

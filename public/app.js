@@ -41,6 +41,30 @@ function categoryOf(t) {
 function poolOf(t) {
   return t.pool || 'core';
 }
+function marketGroup(t) {
+  if (t.market === 'us') return 'us';
+  if (t.is_qdii) return 'qdii';
+  if (t.is_cross_border) return 'hk_cross';
+  return 'cn';
+}
+function marketLabel(t) {
+  const g = marketGroup(t);
+  if (g === 'us') return '美股本土';
+  if (g === 'qdii') return 'QDII/跨境';
+  if (g === 'hk_cross') return '港股/港股通';
+  return 'A股场内';
+}
+function scoreBucket(score, status) {
+  if (status === 'conflict' || status === 'unavailable' || score < 50) return '0';
+  if (score >= 80) return '80';
+  if (score >= 65) return '65';
+  return '50';
+}
+function switchPage(page) {
+  document.body.dataset.page = page;
+  $('rankPageBtn')?.classList.toggle('active', page === 'rank');
+  $('detailPageBtn')?.classList.toggle('active', page === 'detail');
+}
 function recommendationBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
   if (score >= 65) return 'buy';
@@ -134,7 +158,7 @@ function buildReasons(data) {
     else if (h.price_percentile_52w >= 70) cautions.push(`52周价格分位约${fmtPct(h.price_percentile_52w,1)}，价格位置偏高。`);
     else reasons.push(`52周价格分位约${fmtPct(h.price_percentile_52w,1)}，处于中间区间。`);
   }
-  if (t.type === 'dividend_low_vol') {
+  if (['dividend_low_vol', 'dividend'].includes(t.type)) {
     if (mm.dividend_yield !== null && mm.dividend_yield !== undefined) reasons.push(`指数股息率模板值约${fmtPct(mm.dividend_yield,2)}，具备红利吸引力。`);
     if (mm.pe_percentile !== null && mm.pe_percentile !== undefined && mm.pe_percentile <= 35) reasons.push(`PE分位约${fmtPct(mm.pe_percentile,1)}，估值不高。`);
     if (t.fund_size_billion !== null && t.fund_size_billion !== undefined && t.fund_size_billion < 1) cautions.push('基金规模小于1亿元，流动性和存续稳定性要谨慎。');
@@ -299,7 +323,7 @@ function renderRawMetrics(data) {
 
   rows.push(metricItem('ETF代码', data.code || '--', t.name || ''));
   rows.push(metricItem('跟踪指数', t.tracking_index || '未配置'));
-  rows.push(metricItem('ETF类型', isDividend ? '红利/红利低波' : '非红利/成长型'));
+  rows.push(metricItem('ETF类型', displayType(t.type))); 
   rows.push(metricItem('是否QDII', fmtBool(t.is_qdii), t.is_qdii ? '净值和折溢价可能滞后' : ''));
   rows.push(metricItem('是否跨境/港股相关', fmtBool(t.is_cross_border)));
 
@@ -420,10 +444,12 @@ async function renderWatchlist() {
 function filteredTemplates() {
   const pool = $('poolFilter')?.value || 'all';
   const cat = $('categoryFilter')?.value || 'all';
+  const market = $('marketFilter')?.value || 'all';
   const text = ($('poolSearch')?.value || '').trim().toLowerCase();
   return Object.values(templates).filter(t => {
     if (pool !== 'all' && poolOf(t) !== pool) return false;
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
+    if (market !== 'all' && marketGroup(t) !== market) return false;
     if (text) {
       const hay = `${t.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -438,6 +464,8 @@ function renderPoolRankList(items = poolResults) {
   const pool = $('poolFilter')?.value || 'all';
   const cat = $('categoryFilter')?.value || 'all';
   const rec = $('recommendFilter')?.value || 'all';
+  const market = $('marketFilter')?.value || 'all';
+  const scoreF = $('scoreFilter')?.value || 'all';
   const text = ($('poolSearch')?.value || '').trim().toLowerCase();
   let list = items.filter(d => {
     const t = d.template || {};
@@ -445,6 +473,8 @@ function renderPoolRankList(items = poolResults) {
     const bucket = recommendationBucket(Number(s.score || 0), d.quote?.status);
     if (pool !== 'all' && poolOf(t) !== pool) return false;
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
+    if (market !== 'all' && marketGroup(t) !== market) return false;
+    if (scoreF !== 'all' && scoreBucket(Number(s.score || 0), d.quote?.status) !== scoreF) return false;
     if (rec !== 'all' && bucket !== rec) return false;
     if (text) {
       const hay = `${d.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
@@ -452,7 +482,7 @@ function renderPoolRankList(items = poolResults) {
     }
     return true;
   }).sort((a,b) => Number(b.score?.score || 0) - Number(a.score?.score || 0));
-  if (summary) summary.textContent = `当前显示 ${list.length} / ${poolResults.length || Object.keys(templates).length} 只；按评分降序排列。`;
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${poolResults.length || Object.keys(templates).length} 只；按评分降序排列。评分即推荐买入值。`;
   if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = scanningPool ? '正在扫描...' : '暂无符合条件的数据'; return; }
   root.className = 'pool-rank-list';
   root.innerHTML = list.map((d, idx) => {
@@ -464,17 +494,18 @@ function renderPoolRankList(items = poolResults) {
     const score = Number(s.score || 0);
     const degree = recommendationDegree(score, q.status);
     const badge = poolOf(t) === 'core' ? '核心' : '扩展';
+    const statusText = q.status === 'trusted' ? '双源可信' : (q.status === 'single_source' ? '单源参考' : '数据异常');
     return `<button class="rank-card" data-code="${d.code}">
       <div class="rank-no">#${idx + 1}</div>
       <div class="rank-main">
         <div class="rank-title"><strong>${d.code}</strong><span>${t.name || ''}</span></div>
-        <div class="rank-sub">${categoryOf(t)} · ${t.tracking_index || '未配置指数'} · ${badge}</div>
+        <div class="rank-sub">${categoryOf(t)} · ${marketLabel(t)} · ${t.tracking_index || '未配置指数'} · ${badge}</div>
         <div class="rank-reason">${shortReason(d)}</div>
       </div>
       <div class="rank-metrics">
         <span class="score-badge ${degree.cls}">${fmtNumber(score,1)}</span>
         <span>${degree.label}</span>
-        <small>价:${fmtNumber(p.price,3)} · 分位:${fmtPct(h.price_percentile_52w,1)} · 数据:${q.status || '--'}</small>
+        <small>价:${fmtNumber(p.price,3)} · 分位:${fmtPct(h.price_percentile_52w,1)} · ${statusText}</small>
       </div>
     </button>`;
   }).join('');
@@ -487,6 +518,7 @@ function renderPoolRankList(items = poolResults) {
         $('codeInput').value = code;
         renderResult(data);
         renderChips();
+        switchPage('detail');
         window.scrollTo({top: 0, behavior: 'smooth'});
       }
     };
@@ -518,10 +550,11 @@ async function scanPool() {
 $('analyzeBtn').onclick = () => analyze($('codeInput').value);
 $('refreshAllBtn').onclick = renderWatchlist;
 $('scanPoolBtn').onclick = scanPool;
-['poolFilter','categoryFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
+['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
+  switchPage('rank');
   await analyze(currentCode).catch(() => {});
   renderWatchlist();
 })();
