@@ -130,3 +130,10 @@ body[data-page="rank"] .pool-panel { grid-column: span 2; }
 .rank-reason { background:#f8fafc; border-left:3px solid #bfdbfe; padding:7px 9px; border-radius:8px; }
 @media (max-width: 1180px) { .pool-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); } body[data-page="rank"] .pool-panel { grid-column: 1 / -1; } }
 @media (max-width: 760px) { .page-tabs { padding:12px 4vw 0; } .page-tab { flex:1; padding:10px 8px; } .pool-filters { grid-template-columns: 1fr; } }
+body[data-page="rank"] .detail-page, body[data-page="rank"] .discover-page { display:none; }
+body[data-page="detail"] .rank-page, body[data-page="detail"] .discover-page { display:none; }
+body[data-page="discover"] .rank-page, body[data-page="discover"] .detail-page { display:none; }
+body[data-page="discover"] .discover-panel { grid-column: span 2; }
+.discover-card { cursor:default; }
+.discover-card:hover { transform:none; }
+@media (max-width: 1180px) { body[data-page="discover"] .discover-panel { grid-column: 1 / -1; } }

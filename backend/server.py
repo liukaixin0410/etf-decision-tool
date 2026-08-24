@@ -16,6 +16,7 @@ WATCHLIST_PATH = BASE / "watchlist.json"
 sys.path.insert(0, str(BASE))
 from data_sources import compute_history_metrics, get_history, now_iso, validated_quote  # noqa
 from scoring import score_etf  # noqa
+from discovery import discover  # noqa
 
 
 def load_templates():
@@ -52,6 +53,8 @@ class Handler(BaseHTTPRequestHandler):
             return json_response(self, load_templates())
         if parsed.path == "/api/watchlist":
             return json_response(self, {"items": load_watchlist()})
+        if parsed.path == "/api/discover":
+            return json_response(self, discover())
         if parsed.path == "/api/quote":
             qs = parse_qs(parsed.query)
             code = (qs.get("code") or [""])[0].upper().strip()

@@ -25,6 +25,7 @@
   <nav class="page-tabs">
     <button id="rankPageBtn" class="page-tab active" type="button">ETF池排行</button>
     <button id="detailPageBtn" class="page-tab" type="button">单只ETF详情</button>
+    <button id="discoverPageBtn" class="page-tab" type="button">自动发现/待审核</button>
   </nav>
 
   <main class="layout">
@@ -60,6 +61,24 @@
       </div>
       <div id="poolSummary" class="pool-summary">点击“扫描并排序”后，系统会拉取当前行情并按评分排序。</div>
       <div id="poolRankList" class="pool-rank-list empty">暂无排行数据</div>
+    </section>
+
+    <section class="panel wide discover-panel page-section discover-page" id="discoverPanel">
+      <div class="pool-head">
+        <div>
+          <h2>ETF自动发现 / 待审核池</h2>
+          <p>自动从候选ETF中识别股票型ETF，先放入待审核或剔除池；不自动纳入核心/扩展池，避免误加。</p>
+        </div>
+        <button id="discoverBtn" class="primary compact-btn">发现新ETF</button>
+      </div>
+      <div class="pool-filters">
+        <label><span>发现状态</span><select id="discoverStatusFilter"><option value="all">全部</option><option value="pending">待审核</option><option value="excluded">已剔除</option></select></label>
+        <label><span>建议池</span><select id="discoverPoolFilter"><option value="all">全部</option><option value="core">建议核心池</option><option value="extended">建议扩展池</option></select></label>
+        <label><span>类别</span><select id="discoverCategoryFilter"><option value="all">全部类别</option></select></label>
+        <label><span>搜索</span><input id="discoverSearch" placeholder="代码/名称/原因" /></label>
+      </div>
+      <div id="discoverSummary" class="pool-summary">点击“发现新ETF”，系统会展示待审核和自动剔除的候选ETF。</div>
+      <div id="discoverList" class="pool-rank-list empty">暂无发现结果</div>
     </section>
 
     <section class="panel result-panel page-section detail-page">

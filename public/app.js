@@ -4,6 +4,75 @@ let currentCode = '159545';
 let poolResults = [];
 let scanningPool = false;
 
+let discoverResults = [];
+function renderDiscoverCategoryOptions(items) {
+  const select = $('discoverCategoryFilter');
+  if (!select) return;
+  const current = select.value || 'all';
+  select.innerHTML = '<option value="all">全部类别</option>';
+  Array.from(new Set(items.map(x => x.category).filter(Boolean))).sort().forEach(c => {
+    const opt = document.createElement('option'); opt.value = c; opt.textContent = c; select.appendChild(opt);
+  });
+  select.value = Array.from(select.options).some(o => o.value === current) ? current : 'all';
+}
+function renderDiscoverList() {
+  const root = $('discoverList');
+  const summary = $('discoverSummary');
+  if (!root) return;
+  const st = $('discoverStatusFilter')?.value || 'all';
+  const pool = $('discoverPoolFilter')?.value || 'all';
+  const cat = $('discoverCategoryFilter')?.value || 'all';
+  const text = ($('discoverSearch')?.value || '').trim().toLowerCase();
+  let list = discoverResults.filter(x => {
+    if (st !== 'all' && x.status !== st) return false;
+    if (pool !== 'all' && x.suggested_pool !== pool) return false;
+    if (cat !== 'all' && x.category !== cat) return false;
+    if (text) {
+      const hay = `${x.code} ${x.name} ${x.reason} ${x.category || ''}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  });
+  const pending = discoverResults.filter(x => x.status === 'pending').length;
+  const excluded = discoverResults.filter(x => x.status === 'excluded').length;
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${discoverResults.length} 只；待审核 ${pending} 只，已剔除 ${excluded} 只。`;
+  if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = '暂无符合条件的发现结果'; return; }
+  root.className = 'pool-rank-list';
+  root.innerHTML = list.map((x, idx) => {
+    const status = x.status === 'pending' ? '待审核' : '已剔除';
+    const cls = x.status === 'pending' ? 'watch' : 'bad';
+    const poolText = x.suggested_pool === 'core' ? '建议核心池' : (x.suggested_pool === 'extended' ? '建议扩展池' : '不纳入');
+    return `<div class="rank-card discover-card">
+      <div class="rank-no">#${idx + 1}</div>
+      <div class="rank-main">
+        <div class="rank-title"><strong>${x.code}</strong><span>${x.name || ''}</span></div>
+        <div class="rank-sub">${x.category || '未分类'} · ${marketLabel(x)} · ${poolText}</div>
+        <div class="rank-reason">${x.reason || '等待审核'}</div>
+      </div>
+      <div class="rank-metrics">
+        <span class="score-badge ${cls}">${status}</span>
+        <span>${fmtNumber(x.price,3)}</span>
+        <small>${fmtPct(x.pct,2)} · ${x.time || '--'}</small>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function discoverEtfs() {
+  const root = $('discoverList');
+  const summary = $('discoverSummary');
+  if (root) { root.className = 'pool-rank-list empty'; root.textContent = '正在自动发现ETF...'; }
+  if (summary) summary.textContent = '正在抓取候选ETF并做初步分类，请稍等。';
+  try {
+    const data = await api('/api/discover');
+    discoverResults = data.items || [];
+    renderDiscoverCategoryOptions(discoverResults);
+    renderDiscoverList();
+  } catch(e) {
+    if (root) root.textContent = `发现失败：${e.message}`;
+  }
+}
+
+
 function fmtNumber(n, digits = 3) {
   if (n === null || n === undefined || Number.isNaN(Number(n))) return '--';
   return Number(n).toLocaleString('zh-CN', { maximumFractionDigits: digits });
@@ -64,6 +133,7 @@ function switchPage(page) {
   document.body.dataset.page = page;
   $('rankPageBtn')?.classList.toggle('active', page === 'rank');
   $('detailPageBtn')?.classList.toggle('active', page === 'detail');
+  $('discoverPageBtn')?.classList.toggle('active', page === 'discover');
 }
 function recommendationBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
@@ -533,9 +603,12 @@ async function scanPool() {
 $('analyzeBtn').onclick = () => analyze($('codeInput').value);
 $('refreshAllBtn').onclick = renderWatchlist;
 $('scanPoolBtn').onclick = scanPool;
+$('discoverBtn').onclick = discoverEtfs;
 $('rankPageBtn').onclick = () => switchPage('rank');
 $('detailPageBtn').onclick = () => switchPage('detail');
+$('discoverPageBtn').onclick = () => switchPage('discover');
 ['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
+['discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
