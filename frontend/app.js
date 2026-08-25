@@ -42,7 +42,7 @@ function renderDiscoverList() {
     const status = x.status === 'pending' ? '待审核' : '已剔除';
     const cls = x.status === 'pending' ? 'watch' : 'bad';
     const poolText = x.suggested_pool === 'core' ? '建议核心池' : (x.suggested_pool === 'extended' ? '建议扩展池' : '不纳入');
-    return `<div class="rank-card discover-card">
+    return `<button class="rank-card discover-card" data-code="${x.code}" type="button">
       <div class="rank-no">#${idx + 1}</div>
       <div class="rank-main">
         <div class="rank-title"><strong>${x.code}</strong><span>${x.name || ''}</span></div>
@@ -54,8 +54,18 @@ function renderDiscoverList() {
         <span>${fmtNumber(x.price,3)}</span>
         <small>${fmtPct(x.pct,2)} · ${x.time || '--'}</small>
       </div>
-    </div>`;
+    </button>`;
   }).join('');
+  root.querySelectorAll('.discover-card').forEach(btn => {
+    btn.onclick = async () => {
+      const code = btn.dataset.code;
+      currentCode = code;
+      $('codeInput').value = code;
+      switchPage('detail');
+      await analyze(code);
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+  });
 }
 async function discoverEtfs() {
   const root = $('discoverList');
