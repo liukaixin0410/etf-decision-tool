@@ -20,9 +20,15 @@ async function fetchText(url, headers={}){
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return await res.text();
 }
+async function fetchTencentText(url){
+  const res = await fetch(url, {headers: {'User-Agent': UA, 'Referer':'https://gu.qq.com/'}, signal: AbortSignal.timeout(9000)});
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const buf = await res.arrayBuffer();
+  try { return new TextDecoder('gb18030').decode(buf); } catch(e) { return new TextDecoder('gbk').decode(buf); }
+}
 async function quoteTencentCN(code, market){
   const symbol = tencentSymbol(code, market);
-  const text = await fetchText(`https://qt.gtimg.cn/q=${symbol}`, {'Referer':'https://gu.qq.com/'});
+  const text = await fetchTencentText(`https://qt.gtimg.cn/q=${symbol}`);
   const m = text.match(/="(.*)";/);
   if (!m) throw new Error('empty tencent response');
   const p = m[1].split('~');

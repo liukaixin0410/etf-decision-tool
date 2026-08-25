@@ -18,6 +18,12 @@ function typeAndCategory(name){
   if (/军工|有色|稀土|钢铁|化工|农业|畜牧|养殖/.test(n)) return {type:'growth', category:'行业主题'};
   return {type:'growth', category:'待审核'};
 }
+async function fetchTencentText(url){
+  const res = await fetch(url, {headers:{'User-Agent':'Mozilla/5.0','Referer':'https://gu.qq.com/'}, signal:AbortSignal.timeout(9000)});
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const buf = await res.arrayBuffer();
+  try { return new TextDecoder('gb18030').decode(buf); } catch(e) { return new TextDecoder('gbk').decode(buf); }
+}
 async function fetchText(url){
   const res = await fetch(url, {headers:{'User-Agent':'Mozilla/5.0','Referer':'https://gu.qq.com/'}, signal:AbortSignal.timeout(9000)});
   if(!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -44,7 +50,7 @@ exports.handler = async () => {
   for(const group of chunk(unknown, 60)){
     try{
       const symbols = group.map(symbolOf).join(',');
-      const rows = parseAllTencent(await fetchText(`https://qt.gtimg.cn/q=${symbols}`));
+      const rows = parseAllTencent(await fetchTencentText(`https://qt.gtimg.cn/q=${symbols}`));
       for(const q of rows){
         const cls = typeAndCategory(q.name);
         if(cls.excluded){
