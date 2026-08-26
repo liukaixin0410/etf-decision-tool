@@ -4,6 +4,133 @@ let currentCode = '159545';
 let poolResults = [];
 let scanningPool = false;
 
+let indexResults = [];
+let scanningIndex = false;
+function representativeForGroup(list) {
+  return [...list].sort((a,b) => {
+    const pa = poolOf(a) === 'core' ? 1 : 0;
+    const pb = poolOf(b) === 'core' ? 1 : 0;
+    if (pa !== pb) return pb - pa;
+    return Number(b.fund_size_billion || 0) - Number(a.fund_size_billion || 0);
+  })[0];
+}
+function groupedIndexes() {
+  const groups = new Map();
+  Object.values(templates).forEach(t => {
+    const key = t.tracking_index || `未配置指数-${t.code}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(t);
+  });
+  return Array.from(groups.entries()).map(([indexName, etfs]) => ({indexName, etfs, representative: representativeForGroup(etfs)}));
+}
+function indexFilteredGroups() {
+  const cat = $('indexCategoryFilter')?.value || 'all';
+  const market = $('indexMarketFilter')?.value || 'all';
+  const text = ($('indexSearch')?.value || '').trim().toLowerCase();
+  return groupedIndexes().filter(g => {
+    const r = g.representative || {};
+    if (cat !== 'all' && categoryOf(r) !== cat) return false;
+    if (market !== 'all' && marketGroup(r) !== market) return false;
+    if (text) {
+      const hay = `${g.indexName} ${g.etfs.map(x => `${x.code} ${x.name}`).join(' ')}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  });
+}
+function renderIndexCategoryOptions() {
+  const select = $('indexCategoryFilter');
+  if (!select || select.dataset.ready === '1') return;
+  const categories = Array.from(new Set(Object.values(templates).map(categoryOf))).sort();
+  for (const c of categories) {
+    const opt = document.createElement('option'); opt.value = c; opt.textContent = c; select.appendChild(opt);
+  }
+  select.dataset.ready = '1';
+}
+function renderHoldings(holdings) {
+  if (!holdings || !holdings.length) return '<div class="holding-empty">暂无Top 10持仓数据（部分海外ETF/免费源可能缺失）。</div>';
+  return `<div class="holdings-grid">${holdings.slice(0,10).map(h => `<div class="holding-row"><span>${h.rank}. ${h.name}</span><strong>${h.weight}</strong></div>`).join('')}</div>`;
+}
+function renderIndexRankList(items = indexResults) {
+  const root = $('indexRankList');
+  const summary = $('indexSummary');
+  if (!root) return;
+  const cat = $('indexCategoryFilter')?.value || 'all';
+  const market = $('indexMarketFilter')?.value || 'all';
+  const scoreF = $('indexScoreFilter')?.value || 'all';
+  const rec = $('indexRecommendFilter')?.value || 'all';
+  const text = ($('indexSearch')?.value || '').trim().toLowerCase();
+  let list = items.filter(d => {
+    const t = d.representative || {};
+    const score = Number(d.score?.score || 0);
+    const bucket = recommendationBucket(score, d.quote?.status);
+    if (cat !== 'all' && categoryOf(t) !== cat) return false;
+    if (market !== 'all' && marketGroup(t) !== market) return false;
+    if (scoreF !== 'all' && scoreBucket(score, d.quote?.status) !== scoreF) return false;
+    if (rec === 'recommended' && !['buy','cautious'].includes(bucket)) return false;
+    if (rec !== 'all' && rec !== 'recommended' && bucket !== rec) return false;
+    if (text) {
+      const hay = `${d.indexName} ${d.etfs.map(x => `${x.code} ${x.name}`).join(' ')}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  }).sort((a,b) => Number(b.score?.score || 0) - Number(a.score?.score || 0));
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${indexResults.length || groupedIndexes().length} 个指数；按指数推荐买入值降序排列。Top10为代表ETF披露持仓。`;
+  if (!list.length) { root.className = 'index-rank-list empty'; root.textContent = scanningIndex ? '正在扫描指数...' : '暂无符合条件的指数'; return; }
+  root.className = 'index-rank-list';
+  root.innerHTML = list.map((d, idx) => {
+    const t = d.representative || {};
+    const score = Number(d.score?.score || 0);
+    const degree = recommendationDegree(score, d.quote?.status);
+    const related = d.etfs.map(x => x.code).join(' / ');
+    const holdingsDate = d.holdings?.date ? ` · 持仓截止 ${d.holdings.date}` : '';
+    return `<div class="index-card">
+      <div class="index-card-head">
+        <div class="rank-no">#${idx + 1}</div>
+        <div class="index-title-block">
+          <h3>${d.indexName}</h3>
+          <p>${categoryOf(t)} · ${marketLabel(t)} · 代表ETF：${t.code} ${t.name || ''}</p>
+          <p class="index-related">同指数ETF：${related}</p>
+        </div>
+        <div class="rank-metrics">
+          <span class="score-badge ${degree.cls}">${fmtNumber(score,1)}</span>
+          <span>${degree.label}</span>
+          <small>${d.quote?.status || '--'}${holdingsDate}</small>
+        </div>
+      </div>
+      <div class="rank-reason index-reason">${shortReason(d)}</div>
+      <div class="holdings-title">Top 10 成分股/持仓占比</div>
+      ${renderHoldings(d.holdings?.holdings || [])}
+    </div>`;
+  }).join('');
+}
+async function scanIndexes() {
+  if (scanningIndex) return;
+  scanningIndex = true;
+  indexResults = [];
+  const groups = indexFilteredGroups();
+  const root = $('indexRankList');
+  const summary = $('indexSummary');
+  if (root) { root.className = 'index-rank-list empty'; root.textContent = '正在扫描指数...'; }
+  for (let i=0; i<groups.length; i++) {
+    const g = groups[i];
+    const t = g.representative;
+    if (summary) summary.textContent = `正在扫描 ${i+1} / ${groups.length}：${g.indexName}`;
+    try {
+      const quoteData = await api(`/api/quote?code=${encodeURIComponent(t.code)}`);
+      let holdings = {holdings: []};
+      try { holdings = await api(`/api/holdings?code=${encodeURIComponent(t.code)}`); } catch(e) {}
+      indexResults.push({indexName:g.indexName, etfs:g.etfs, representative:t, quote:quoteData.quote, history_metrics:quoteData.history_metrics, score:quoteData.score, template:t, holdings});
+      renderIndexRankList(indexResults);
+    } catch(e) {
+      indexResults.push({indexName:g.indexName, etfs:g.etfs, representative:t, quote:{status:'unavailable', reason:e.message}, history_metrics:{}, score:{score:0, level:'暂停判断', action:e.message, risk_tags:['抓取失败']}, template:t, holdings:{holdings:[]}});
+    }
+  }
+  scanningIndex = false;
+  renderIndexRankList(indexResults);
+}
+
+
 let discoverResults = [];
 function renderDiscoverCategoryOptions(items) {
   const select = $('discoverCategoryFilter');
@@ -149,6 +276,7 @@ function switchPage(page) {
   $('rankPageBtn')?.classList.toggle('active', page === 'rank');
   $('detailPageBtn')?.classList.toggle('active', page === 'detail');
   $('discoverPageBtn')?.classList.toggle('active', page === 'discover');
+  $('indexPageBtn')?.classList.toggle('active', page === 'index');
 }
 function recommendationBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
@@ -320,6 +448,7 @@ async function loadTemplates() {
 function renderChips() {
   // 顶部快捷ETF代码列表已移除；保留函数用于刷新类别筛选项。
   renderCategoryOptions();
+  renderIndexCategoryOptions();
 }
 function renderCategoryOptions() {
   const select = $('categoryFilter');
@@ -621,11 +750,14 @@ $('analyzeBtn').onclick = async () => { switchPage('detail'); await analyze($('c
 if ($('refreshAllBtn')) $('refreshAllBtn').onclick = renderWatchlist;
 $('scanPoolBtn').onclick = scanPool;
 $('discoverBtn').onclick = discoverEtfs;
+$('scanIndexBtn').onclick = scanIndexes;
 $('rankPageBtn').onclick = () => switchPage('rank');
 $('detailPageBtn').onclick = () => switchPage('detail');
 $('discoverPageBtn').onclick = () => switchPage('discover');
+$('indexPageBtn').onclick = () => switchPage('index');
 ['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
 ['discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
+['indexCategoryFilter','indexMarketFilter','indexScoreFilter','indexRecommendFilter','indexSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'indexSearch' ? 'input' : 'change', () => renderIndexRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();

@@ -160,3 +160,23 @@ body[data-page="detail"] .result-panel { grid-column: 1 / -1; }
 .discover-card:hover { transform: translateY(-1px); }
 @media (max-width: 1180px) { .layout { grid-template-columns:1fr; } .top-actions { grid-template-columns:1fr; } .pool-filters, .discover-panel .pool-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .top-actions { padding:12px 4vw 0; } .quick-search-row { grid-template-columns:1fr; } .pool-filters, .discover-panel .pool-filters { grid-template-columns:1fr; } .rank-card { grid-template-columns: 42px 1fr; } }
+body[data-page="index"] .rank-page, body[data-page="index"] .detail-page, body[data-page="index"] .discover-page { display:none; }
+body[data-page="index"] .index-panel { grid-column: 1 / -1; }
+.index-rank-list { display:grid; grid-template-columns:1fr; gap:14px; max-height:820px; overflow:auto; padding-right:4px; }
+.index-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; padding:16px; box-shadow:0 10px 30px rgba(15,23,42,.05); }
+.index-card-head { display:grid; grid-template-columns:54px minmax(0,1fr) 200px; gap:12px; align-items:start; }
+.index-title-block h3 { margin:0; font-size:20px; color:#0f172a; }
+.index-title-block p { margin:5px 0 0; color:#64748b; line-height:1.4; }
+.index-related { font-size:13px; }
+.index-reason { margin-top:12px; }
+.holdings-title { margin-top:12px; font-weight:800; color:#334155; }
+.holdings-grid { margin-top:8px; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+.holding-row { display:flex; justify-content:space-between; gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:9px 10px; line-height:1.35; }
+.holding-row span { color:#334155; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.holding-row strong { color:#1e3a8a; flex:0 0 auto; }
+.holding-empty { margin-top:8px; color:#64748b; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:10px; }
+@media (max-width: 900px) { .index-card-head { grid-template-columns:42px 1fr; } .index-card-head .rank-metrics { grid-column:2; align-items:flex-start; text-align:left; } .holdings-grid { grid-template-columns:1fr; } }
+/* Page visibility fix for the new index scoring page */
+body[data-page="rank"] .index-page,
+body[data-page="detail"] .index-page,
+body[data-page="discover"] .index-page { display:none; }

@@ -26,6 +26,7 @@
     <button id="rankPageBtn" class="page-tab active" type="button">ETF池排行</button>
     <button id="detailPageBtn" class="page-tab" type="button">单只ETF详情</button>
     <button id="discoverPageBtn" class="page-tab" type="button">自动发现/待审核</button>
+    <button id="indexPageBtn" class="page-tab" type="button">指数评分</button>
   </nav>
 
   <section class="top-actions">
@@ -82,6 +83,25 @@
       </div>
       <div id="discoverSummary" class="pool-summary">点击“发现新ETF”，系统会展示待审核和自动剔除的候选ETF。</div>
       <div id="discoverList" class="pool-rank-list empty">暂无发现结果</div>
+    </section>
+
+    <section class="panel wide index-panel page-section index-page" id="indexPanel">
+      <div class="pool-head">
+        <div>
+          <h2>指数评分</h2>
+          <p>按跟踪指数聚合ETF，使用代表ETF的当前评分作为指数推荐买入值，并展示代表ETF的Top 10持仓。</p>
+        </div>
+        <button id="scanIndexBtn" class="primary compact-btn">扫描指数</button>
+      </div>
+      <div class="pool-filters">
+        <label><span>类别</span><select id="indexCategoryFilter"><option value="all">全部类别</option></select></label>
+        <label><span>市场</span><select id="indexMarketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>评分</span><select id="indexScoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="60">60-65分</option><option value="50">50-60分</option><option value="0">50分以下/暂停</option></select></label>
+        <label><span>推荐程度</span><select id="indexRecommendFilter"><option value="recommended" selected>默认：推荐候选</option><option value="all">全部</option><option value="buy">小底仓以上</option><option value="cautious">谨慎小底仓</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
+        <label><span>搜索</span><input id="indexSearch" placeholder="指数/ETF/代码" /></label>
+      </div>
+      <div id="indexSummary" class="pool-summary">点击“扫描指数”后，系统会按指数聚合并评分排序。</div>
+      <div id="indexRankList" class="index-rank-list empty">暂无指数评分数据</div>
     </section>
 
     <section class="panel result-panel page-section detail-page">
