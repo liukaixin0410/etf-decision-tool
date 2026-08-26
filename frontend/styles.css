@@ -137,3 +137,26 @@ body[data-page="discover"] .discover-panel { grid-column: span 2; }
 .discover-card { cursor:default; }
 .discover-card:hover { transform:none; }
 @media (max-width: 1180px) { body[data-page="discover"] .discover-panel { grid-column: 1 / -1; } }
+/* UX refresh: single-column workflow with global search and clearer pages */
+.layout { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 1480px; margin: 0 auto; }
+.top-actions { display:grid; grid-template-columns: minmax(280px, 520px) 1fr; gap:16px; align-items:stretch; padding:16px 6vw 0; background:#eef4ff; }
+.quick-search, .top-note { background:#fff; border:1px solid #dbe5f3; border-radius:20px; padding:16px; box-shadow:0 10px 30px rgba(15,23,42,.06); }
+.quick-search label { display:block; font-size:14px; color:#64748b; margin-bottom:8px; font-weight:700; }
+.quick-search-row { display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:center; }
+.quick-search-row input { height:48px; }
+.top-note { display:flex; flex-direction:column; justify-content:center; gap:6px; color:#334155; line-height:1.45; }
+.top-note strong { color:#1e3a8a; font-size:16px; }
+.top-note span { color:#64748b; }
+body[data-page="rank"] .pool-panel, body[data-page="discover"] .discover-panel { grid-column: 1 / -1; }
+body[data-page="detail"] .result-panel { grid-column: 1 / -1; }
+.pool-filters { grid-template-columns: repeat(6, minmax(130px, 1fr)); background:#f8fafc; border:1px solid #e2e8f0; padding:14px; border-radius:18px; }
+.pool-head { align-items:center; }
+.pool-head h2 { font-size:24px; }
+.rank-card { grid-template-columns: 58px minmax(0, 1fr) 220px; }
+.rank-title strong { letter-spacing:.2px; }
+.rank-reason { font-size:14px; color:#1f2937; }
+.discover-panel .pool-filters { grid-template-columns: repeat(6, minmax(130px, 1fr)); }
+.discover-card { cursor:pointer; }
+.discover-card:hover { transform: translateY(-1px); }
+@media (max-width: 1180px) { .layout { grid-template-columns:1fr; } .top-actions { grid-template-columns:1fr; } .pool-filters, .discover-panel .pool-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .top-actions { padding:12px 4vw 0; } .quick-search-row { grid-template-columns:1fr; } .pool-filters, .discover-panel .pool-filters { grid-template-columns:1fr; } .rank-card { grid-template-columns: 42px 1fr; } }

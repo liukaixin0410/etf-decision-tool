@@ -28,20 +28,21 @@
     <button id="discoverPageBtn" class="page-tab" type="button">自动发现/待审核</button>
   </nav>
 
-  <main class="layout">
-    <section class="panel controls">
-      <h2>选择或输入ETF</h2>
-      <label class="field">
-        <span>ETF代码</span>
+  <section class="top-actions">
+    <div class="quick-search">
+      <label>输入ETF代码查看详情</label>
+      <div class="quick-search-row">
         <input id="codeInput" value="159545" placeholder="例如 159545 / 513050 / VTI" />
-      </label>
-      <button id="analyzeBtn" class="primary">抓取并判断</button>
-      <button id="refreshAllBtn" class="secondary">刷新观察清单</button>
-      <div class="notice">
-        <strong>重要边界</strong>
-        <p>免费版不承诺交易所级实时。若数据源冲突、过期或不可用，工具会暂停评分，不会用缓存或示例数据冒充实时行情。</p>
+        <button id="analyzeBtn" class="primary compact-btn">查看详情</button>
       </div>
-    </section>
+    </div>
+    <div class="top-note">
+      <strong>默认看推荐候选</strong>
+      <span>先扫核心池，按“推荐买入值”降序；免费数据异常时不做买入判断。</span>
+    </div>
+  </section>
+
+  <main class="layout">
 
     <section class="panel wide pool-panel page-section rank-page" id="poolRankPanel">
       <div class="pool-head">
@@ -52,11 +53,11 @@
         <button id="scanPoolBtn" class="primary compact-btn">扫描并排序</button>
       </div>
       <div class="pool-filters">
-        <label><span>ETF池</span><select id="poolFilter"><option value="all">全部</option><option value="core">核心池</option><option value="extended">扩展池</option></select></label>
+        <label><span>ETF池</span><select id="poolFilter"><option value="core" selected>核心池</option><option value="extended">扩展池</option><option value="all">全部</option></select></label>
         <label><span>类别</span><select id="categoryFilter"><option value="all">全部类别</option></select></label>
         <label><span>市场</span><select id="marketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
-        <label><span>评分</span><select id="scoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="50">50-65分</option><option value="0">50分以下/暂停</option></select></label>
-        <label><span>推荐程度</span><select id="recommendFilter"><option value="all">全部</option><option value="buy">可买/小底仓以上</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
+        <label><span>评分</span><select id="scoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="60">60-65分</option><option value="50">50-60分</option><option value="0">50分以下/暂停</option></select></label>
+        <label><span>推荐程度</span><select id="recommendFilter"><option value="recommended" selected>默认：推荐候选</option><option value="all">全部</option><option value="buy">小底仓以上</option><option value="cautious">谨慎小底仓</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
         <label><span>搜索</span><input id="poolSearch" placeholder="代码/名称/指数" /></label>
       </div>
       <div id="poolSummary" class="pool-summary">点击“扫描并排序”后，系统会拉取当前行情并按评分排序。</div>
@@ -72,9 +73,11 @@
         <button id="discoverBtn" class="primary compact-btn">发现新ETF</button>
       </div>
       <div class="pool-filters">
-        <label><span>发现状态</span><select id="discoverStatusFilter"><option value="all">全部</option><option value="pending">待审核</option><option value="excluded">已剔除</option></select></label>
-        <label><span>建议池</span><select id="discoverPoolFilter"><option value="all">全部</option><option value="core">建议核心池</option><option value="extended">建议扩展池</option></select></label>
+        <label><span>发现状态</span><select id="discoverStatusFilter"><option value="pending" selected>默认：待审核</option><option value="all">全部</option><option value="excluded">已剔除</option></select></label>
+        <label><span>建议池</span><select id="discoverPoolFilter"><option value="core" selected>默认：建议核心池</option><option value="extended">建议扩展池</option><option value="all">全部</option></select></label>
         <label><span>类别</span><select id="discoverCategoryFilter"><option value="all">全部类别</option></select></label>
+        <label><span>市场</span><select id="discoverMarketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>质量</span><select id="discoverQualityFilter"><option value="stock">股票型候选</option><option value="all">全部含剔除</option></select></label>
         <label><span>搜索</span><input id="discoverSearch" placeholder="代码/名称/原因" /></label>
       </div>
       <div id="discoverSummary" class="pool-summary">点击“发现新ETF”，系统会展示待审核和自动剔除的候选ETF。</div>

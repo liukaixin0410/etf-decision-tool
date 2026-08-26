@@ -22,11 +22,15 @@ function renderDiscoverList() {
   const st = $('discoverStatusFilter')?.value || 'all';
   const pool = $('discoverPoolFilter')?.value || 'all';
   const cat = $('discoverCategoryFilter')?.value || 'all';
+  const market = $('discoverMarketFilter')?.value || 'all';
+  const quality = $('discoverQualityFilter')?.value || 'stock';
   const text = ($('discoverSearch')?.value || '').trim().toLowerCase();
   let list = discoverResults.filter(x => {
     if (st !== 'all' && x.status !== st) return false;
     if (pool !== 'all' && x.suggested_pool !== pool) return false;
     if (cat !== 'all' && x.category !== cat) return false;
+    if (market !== 'all' && marketGroup(x) !== market) return false;
+    if (quality === 'stock' && x.status === 'excluded') return false;
     if (text) {
       const hay = `${x.code} ${x.name} ${x.reason} ${x.category || ''}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -35,7 +39,7 @@ function renderDiscoverList() {
   });
   const pending = discoverResults.filter(x => x.status === 'pending').length;
   const excluded = discoverResults.filter(x => x.status === 'excluded').length;
-  if (summary) summary.textContent = `当前显示 ${list.length} / ${discoverResults.length} 只；待审核 ${pending} 只，已剔除 ${excluded} 只。`;
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${discoverResults.length} 只；默认展示待审核且建议核心池的股票型候选。待审核 ${pending} 只，已剔除 ${excluded} 只。`;
   if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = '暂无符合条件的发现结果'; return; }
   root.className = 'pool-rank-list';
   root.innerHTML = list.map((x, idx) => {
@@ -137,6 +141,7 @@ function scoreBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return '0';
   if (score >= 80) return '80';
   if (score >= 65) return '65';
+  if (score >= 60) return '60';
   return '50';
 }
 function switchPage(page) {
@@ -148,6 +153,7 @@ function switchPage(page) {
 function recommendationBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
   if (score >= 65) return 'buy';
+  if (score >= 60) return 'cautious';
   return 'watch';
 }
 function shortReason(data) {
@@ -538,7 +544,8 @@ function renderPoolRankList(items = poolResults) {
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
     if (market !== 'all' && marketGroup(t) !== market) return false;
     if (scoreF !== 'all' && scoreBucket(Number(s.score || 0), d.quote?.status) !== scoreF) return false;
-    if (rec !== 'all' && bucket !== rec) return false;
+    if (rec === 'recommended' && !['buy','cautious'].includes(bucket)) return false;
+    if (rec !== 'all' && rec !== 'recommended' && bucket !== rec) return false;
     if (text) {
       const hay = `${d.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -610,19 +617,20 @@ async function scanPool() {
   renderPoolRankList(poolResults);
 }
 
-$('analyzeBtn').onclick = () => analyze($('codeInput').value);
-$('refreshAllBtn').onclick = renderWatchlist;
+$('analyzeBtn').onclick = async () => { switchPage('detail'); await analyze($('codeInput').value); };
+if ($('refreshAllBtn')) $('refreshAllBtn').onclick = renderWatchlist;
 $('scanPoolBtn').onclick = scanPool;
 $('discoverBtn').onclick = discoverEtfs;
 $('rankPageBtn').onclick = () => switchPage('rank');
 $('detailPageBtn').onclick = () => switchPage('detail');
 $('discoverPageBtn').onclick = () => switchPage('discover');
 ['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
-['discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
+['discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
   switchPage('rank');
   await analyze(currentCode).catch(() => {});
   renderWatchlist();
+  setTimeout(() => scanPool(), 300);
 })();
