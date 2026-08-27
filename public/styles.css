@@ -180,3 +180,13 @@ body[data-page="index"] .index-panel { grid-column: 1 / -1; }
 body[data-page="rank"] .index-page,
 body[data-page="detail"] .index-page,
 body[data-page="discover"] .index-page { display:none; }
+.index-dimensions { margin-top:12px; border:1px solid #dbeafe; background:#f8fbff; border-radius:16px; padding:10px 12px; }
+.index-dimensions summary { cursor:pointer; font-weight:800; color:#1e3a8a; list-style:none; }
+.index-dimensions summary::-webkit-details-marker { display:none; }
+.index-dimensions summary::after { content:"展开/收起"; float:right; font-size:12px; color:#64748b; font-weight:600; }
+.index-dimension-grid { margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:8px; }
+.index-dimension { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:9px 10px; }
+.index-dimension span, .index-component span { display:block; color:#64748b; font-size:12px; margin-bottom:4px; }
+.index-dimension strong, .index-component strong { color:#0f172a; font-size:15px; }
+.index-components { margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; }
+.index-component { background:#eef6ff; border:1px solid #bfdbfe; border-radius:12px; padding:9px 10px; }

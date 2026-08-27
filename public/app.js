@@ -51,6 +51,46 @@ function renderHoldings(holdings) {
   if (!holdings || !holdings.length) return '<div class="holding-empty">暂无Top 10持仓数据（部分海外ETF/免费源可能缺失）。</div>';
   return `<div class="holdings-grid">${holdings.slice(0,10).map(h => `<div class="holding-row"><span>${h.rank}. ${h.name}</span><strong>${h.weight}</strong></div>`).join('')}</div>`;
 }
+
+function renderIndexDimensions(d) {
+  const t = d.representative || {};
+  const h = d.history_metrics || {};
+  const q = d.quote || {};
+  const s = d.score || {};
+  const mm = t.manual_metrics || {};
+  const comps = s.components || {};
+  const isDividend = ['dividend_low_vol', 'dividend'].includes(t.type);
+  const rows = [];
+  rows.push(['指数类别', categoryOf(t)]);
+  rows.push(['市场', marketLabel(t)]);
+  rows.push(['同指数ETF数量', `${(d.etfs || []).length}只`]);
+  rows.push(['代表ETF规模', t.fund_size_billion == null ? '未配置' : `${fmtNumber(t.fund_size_billion, 2)}亿元`]);
+  rows.push(['综合费率', fmtMaybePct(t.expense_ratio, 2)]);
+  rows.push(['数据状态', q.status || '--']);
+  rows.push(['52周价格分位', fmtMaybePct(h.price_percentile_52w, 1)]);
+  rows.push(['52周最低/最高', `${fmtMaybeNumber(h.low_52w, 3)} / ${fmtMaybeNumber(h.high_52w, 3)}`]);
+  rows.push(['近一年波动率', fmtMaybePct(h.annual_volatility_pct, 1)]);
+  rows.push(['近一年最大回撤', fmtMaybePct(h.max_drawdown_pct, 1)]);
+  if (isDividend) {
+    rows.push(['指数股息率', fmtMaybePct(mm.dividend_yield, 2)]);
+    rows.push(['股息率分位', fmtMaybePct(mm.dividend_yield_percentile, 1)]);
+    rows.push(['PE分位', fmtMaybePct(mm.pe_percentile, 1)]);
+    rows.push(['PB分位', fmtMaybePct(mm.pb_percentile, 1)]);
+    rows.push(['分红可持续性', fmtMaybeNumber(mm.sustainability_score, 0, '分')]);
+  } else {
+    rows.push(['估值分位', fmtMaybePct(mm.valuation_percentile, 1)]);
+    rows.push(['盈利趋势', fmtMaybeNumber(mm.earnings_trend_score, 0, '分')]);
+    rows.push(['政策/汇率风险', fmtMaybeNumber(mm.policy_risk_score, 0, '分')]);
+  }
+  const topComponents = Object.entries(comps).slice(0, 6);
+  const componentHtml = topComponents.length ? `<div class="index-components">${topComponents.map(([k,v]) => `<div class="index-component"><span>${k}</span><strong>${fmtNumber(v,1)}</strong></div>`).join('')}</div>` : '';
+  return `<details class="index-dimensions" open>
+    <summary>评分维度与评估指标</summary>
+    <div class="index-dimension-grid">${rows.map(([k,v]) => `<div class="index-dimension"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div>
+    ${componentHtml}
+  </details>`;
+}
+
 function renderIndexRankList(items = indexResults) {
   const root = $('indexRankList');
   const summary = $('indexSummary');
@@ -99,6 +139,7 @@ function renderIndexRankList(items = indexResults) {
         </div>
       </div>
       <div class="rank-reason index-reason">${shortReason(d)}</div>
+      ${renderIndexDimensions(d)}
       <div class="holdings-title">Top 10 成分股/持仓占比</div>
       ${renderHoldings(d.holdings?.holdings || [])}
     </div>`;
