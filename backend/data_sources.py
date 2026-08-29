@@ -121,7 +121,7 @@ def quote_tencent_cn(code: str, market: Optional[str] = None) -> Dict[str, Any]:
     }
 
 
-def history_tencent_cn(code: str, market: Optional[str] = None, days: int = 320) -> List[Dict[str, Any]]:
+def history_tencent_cn(code: str, market: Optional[str] = None, days: int = 2600) -> List[Dict[str, Any]]:
     market = market or market_for_code(code)
     symbol = ('sh' if market == 'cn_sh' else 'sz') + code
     url = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?" + urlencode({"param": f"{symbol},day,,,{days},qfq"})
@@ -469,11 +469,21 @@ def compute_history_metrics(rows: List[Dict[str, Any]], current_price: Optional[
     if not closes:
         return {"ok": False, "error": "no history"}
     price = current_price or closes[-1]
-    lo = min(closes)
-    hi = max(closes)
-    price_percentile = None
-    if hi > lo and price is not None:
-        price_percentile = max(0.0, min(100.0, (price - lo) / (hi - lo) * 100))
+    def percentile_for(n):
+        if len(closes) < min(n, 120):
+            return {"pct": None, "low": None, "high": None, "days": len(closes)}
+        win = closes[-min(n, len(closes)):]
+        lo = min(win)
+        hi = max(win)
+        pct = None
+        if hi > lo and price is not None:
+            pct = max(0.0, min(100.0, (price - lo) / (hi - lo) * 100))
+        return {"pct": pct, "low": lo, "high": hi, "days": len(win)}
+    p1 = percentile_for(252)
+    p2 = percentile_for(504)
+    p3 = percentile_for(756)
+    p5 = percentile_for(1260)
+    p10 = percentile_for(2520)
     returns = []
     for a, b in zip(closes, closes[1:]):
         if a and a > 0 and b:
@@ -493,9 +503,21 @@ def compute_history_metrics(rows: List[Dict[str, Any]], current_price: Optional[
     return {
         "ok": True,
         "days": len(closes),
-        "low_52w": lo,
-        "high_52w": hi,
-        "price_percentile_52w": price_percentile,
+        "low_52w": p1["low"],
+        "high_52w": p1["high"],
+        "price_percentile_52w": p1["pct"],
+        "low_2y": p2["low"],
+        "high_2y": p2["high"],
+        "price_percentile_2y": p2["pct"],
+        "low_3y": p3["low"],
+        "high_3y": p3["high"],
+        "price_percentile_3y": p3["pct"],
+        "low_5y": p5["low"],
+        "high_5y": p5["high"],
+        "price_percentile_5y": p5["pct"],
+        "low_10y": p10["low"],
+        "high_10y": p10["high"],
+        "price_percentile_10y": p10["pct"],
         "annual_volatility_pct": vol,
         "max_drawdown_pct": max_dd * 100,
         "ma20": ma20,

@@ -41,7 +41,7 @@ async function quoteTencentCN(code, market){
 }
 async function historyTencentCN(code, market){
   const symbol = tencentSymbol(code, market);
-  const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + encodeURIComponent(`${symbol},day,,,320,qfq`);
+  const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + encodeURIComponent(`${symbol},day,,,2600,qfq`);
   const text = await fetchText(url, {'Referer':'https://gu.qq.com/'});
   const data = JSON.parse(text).data || {};
   const block = data[symbol] || {};
@@ -67,9 +67,9 @@ async function quoteCnbcUS(code){
   return {source:'cnbc', ok:price !== null && price > 0, code, name:r.name||code, price, prev_close:null, change_pct:safeFloat(r.change_pct), open:safeFloat(r.open), high:safeFloat(r.high), low:safeFloat(r.low), volume:vol, amount:price&&vol ? price*vol : null, currency:'USD', fetched_at:nowIso(), raw_time:r.last_time||r.reg_last_time||null, error:null};
 }
 async function historyNasdaqUS(code){
-  const end = new Date(); const start = new Date(Date.now() - 370*24*3600*1000);
+  const end = new Date(); const start = new Date(Date.now() - 3650*24*3600*1000);
   const fmt = d => d.toISOString().slice(0,10);
-  const url = `https://api.nasdaq.com/api/quote/${code}/historical?assetclass=etf&fromdate=${fmt(start)}&todate=${fmt(end)}&limit=9999`;
+  const url = `https://api.nasdaq.com/api/quote/${code}/historical?assetclass=etf&fromdate=${fmt(start)}&todate=${fmt(end)}&limit=3000`;
   const text = await fetchText(url, {'Accept':'application/json,text/plain,*/*','Referer':'https://www.nasdaq.com/'});
   const rows = (((JSON.parse(text).data||{}).tradesTable||{}).rows||[]).reverse();
   return rows.map(r => ({date:r.date, open:safeFloat(r.open), close:safeFloat(r.close), high:safeFloat(r.high), low:safeFloat(r.low), volume:safeFloat(r.volume), amount:null})).filter(r => r.close !== null);
@@ -77,14 +77,27 @@ async function historyNasdaqUS(code){
 function computeHistory(rows, current){
   const closes = rows.map(r=>r.close).filter(v=>v!==null && Number.isFinite(v));
   if (!closes.length) return {ok:false, error:'no history'};
-  const price = current || closes[closes.length-1]; const lo = Math.min(...closes); const hi = Math.max(...closes);
-  const pct = hi>lo ? Math.max(0, Math.min(100, (price-lo)/(hi-lo)*100)) : null;
+  const price = current || closes[closes.length-1];
+  const percentileFor = (n) => {
+    if (closes.length < Math.min(n, 120)) return {pct:null, low:null, high:null, days:closes.length};
+    const win = closes.slice(-Math.min(n, closes.length));
+    const lo = Math.min(...win), hi = Math.max(...win);
+    const pct = hi>lo ? Math.max(0, Math.min(100, (price-lo)/(hi-lo)*100)) : null;
+    return {pct, low:lo, high:hi, days:win.length};
+  };
+  const p1 = percentileFor(252), p2 = percentileFor(504), p3 = percentileFor(756), p5 = percentileFor(1260), p10 = percentileFor(2520);
   const rets=[]; for(let i=1;i<closes.length;i++){ if(closes[i-1]>0) rets.push(closes[i]/closes[i-1]-1); }
   const mean = rets.reduce((a,b)=>a+b,0)/(rets.length||1); const variance = rets.reduce((a,b)=>a+(b-mean)**2,0)/(rets.length||1);
   const vol = rets.length>2 ? Math.sqrt(variance)*Math.sqrt(252)*100 : null;
   let peak=closes[0], maxDd=0; for(const c of closes){ if(c>peak) peak=c; const dd=c/peak-1; if(dd<maxDd) maxDd=dd; }
   const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
-  return {ok:true, days:closes.length, low_52w:lo, high_52w:hi, price_percentile_52w:pct, annual_volatility_pct:vol, max_drawdown_pct:maxDd*100, ma20:avg(closes.slice(-20)), ma60:avg(closes.slice(-60)), last_history_date:rows[rows.length-1]?.date};
+  return {ok:true, days:closes.length,
+    low_52w:p1.low, high_52w:p1.high, price_percentile_52w:p1.pct,
+    low_2y:p2.low, high_2y:p2.high, price_percentile_2y:p2.pct,
+    low_3y:p3.low, high_3y:p3.high, price_percentile_3y:p3.pct,
+    low_5y:p5.low, high_5y:p5.high, price_percentile_5y:p5.pct,
+    low_10y:p10.low, high_10y:p10.high, price_percentile_10y:p10.pct,
+    annual_volatility_pct:vol, max_drawdown_pct:maxDd*100, ma20:avg(closes.slice(-20)), ma60:avg(closes.slice(-60)), last_history_date:rows[rows.length-1]?.date};
 }
 function scorePricePercentile(p){ if(p==null) return 45; if(p<=20) return 90; if(p<=40) return 75; if(p<=60) return 55; if(p<=80) return 35; return 15; }
 function inv(p){ return p==null ? 45 : Math.max(0, Math.min(100, 100-p)); }

@@ -66,8 +66,14 @@ function renderIndexDimensions(d) {
   rows.push(['同指数ETF数量', `${(d.etfs || []).length}只`]);
   rows.push(['代表ETF规模', t.fund_size_billion == null ? '未配置' : `${fmtNumber(t.fund_size_billion, 2)}亿元`]);
   rows.push(['综合费率', fmtMaybePct(t.expense_ratio, 2)]);
+  rows.push(['滚动PE', fmtMaybeNumber(rollingPeValue(t), 2, '倍')]);
+  rows.push(['滚动PE分位', fmtMaybePct(rollingPePercentile(t), 1)]);
   rows.push(['数据状态', q.status || '--']);
-  rows.push(['52周价格分位', fmtMaybePct(h.price_percentile_52w, 1)]);
+  rows.push(['1年价格分位', fmtMaybePct(h.price_percentile_52w, 1)]);
+  rows.push(['2年价格分位', fmtMaybePct(h.price_percentile_2y, 1)]);
+  rows.push(['3年价格分位', fmtMaybePct(h.price_percentile_3y, 1)]);
+  rows.push(['5年价格分位', fmtMaybePct(h.price_percentile_5y, 1)]);
+  rows.push(['10年价格分位', fmtMaybePct(h.price_percentile_10y, 1)]);
   rows.push(['52周最低/最高', `${fmtMaybeNumber(h.low_52w, 3)} / ${fmtMaybeNumber(h.high_52w, 3)}`]);
   rows.push(['近一年波动率', fmtMaybePct(h.annual_volatility_pct, 1)]);
   rows.push(['近一年最大回撤', fmtMaybePct(h.max_drawdown_pct, 1)]);
@@ -183,10 +189,29 @@ function renderDiscoverCategoryOptions(items) {
   });
   select.value = Array.from(select.options).some(o => o.value === current) ? current : 'all';
 }
+
+function discoverScoreValue(x) {
+  if (x.status === 'excluded') return 0;
+  if (x.score && Number.isFinite(Number(x.score.score))) return Number(x.score.score);
+  return -1;
+}
+function discoverRecommendationLabel(x) {
+  if (x.status === 'excluded') return '已剔除';
+  const score = discoverScoreValue(x);
+  if (score < 0) return '评分中';
+  return recommendationDegree(score, x.quote?.status || 'single_source').label;
+}
+function discoverScoreClass(x) {
+  if (x.status === 'excluded') return 'bad';
+  const score = discoverScoreValue(x);
+  if (score < 0) return 'neutral';
+  return recommendationDegree(score, x.quote?.status || 'single_source').cls;
+}
 function renderDiscoverList() {
   const root = $('discoverList');
   const summary = $('discoverSummary');
   if (!root) return;
+  const mode = $('discoverModeFilter')?.value || 'score';
   const st = $('discoverStatusFilter')?.value || 'all';
   const pool = $('discoverPoolFilter')?.value || 'all';
   const cat = $('discoverCategoryFilter')?.value || 'all';
@@ -205,26 +230,45 @@ function renderDiscoverList() {
     }
     return true;
   });
+  list = mode === 'score'
+    ? list.sort((a,b) => discoverScoreValue(b) - discoverScoreValue(a))
+    : list.sort((a,b) => (a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1) || String(a.code).localeCompare(String(b.code))); 
   const pending = discoverResults.filter(x => x.status === 'pending').length;
   const excluded = discoverResults.filter(x => x.status === 'excluded').length;
-  if (summary) summary.textContent = `当前显示 ${list.length} / ${discoverResults.length} 只；默认展示待审核且建议核心池的股票型候选。待审核 ${pending} 只，已剔除 ${excluded} 只。`;
+  if (summary) summary.textContent = mode === 'score'
+    ? `当前显示 ${list.length} / ${discoverResults.length} 只；买入评分排行=发现候选里当前更值得关注的排序。待审核 ${pending} 只，已剔除 ${excluded} 只。`
+    : `当前显示 ${list.length} / ${discoverResults.length} 只；入池审核=判断是否纳入核心池/扩展池。待审核 ${pending} 只，已剔除 ${excluded} 只。`; 
   if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = '暂无符合条件的发现结果'; return; }
   root.className = 'pool-rank-list';
   root.innerHTML = list.map((x, idx) => {
     const status = x.status === 'pending' ? '待审核' : '已剔除';
     const cls = x.status === 'pending' ? 'watch' : 'bad';
     const poolText = x.suggested_pool === 'core' ? '建议核心池' : (x.suggested_pool === 'extended' ? '建议扩展池' : '不纳入');
-    return `<button class="rank-card discover-card" data-code="${x.code}" type="button">
+    const buyScore = discoverScoreValue(x);
+    const buyLabel = discoverRecommendationLabel(x);
+    const dataStatus = x.quote?.status || status;
+    return `<button class="rank-card discover-card discover-card-split" data-code="${x.code}" type="button">
       <div class="rank-no">#${idx + 1}</div>
       <div class="rank-main">
         <div class="rank-title"><strong>${x.code}</strong><span>${x.name || ''}</span></div>
-        <div class="rank-sub">${x.category || '未分类'} · ${marketLabel(x)} · ${poolText}</div>
-        <div class="rank-reason">${x.reason || '等待审核'}</div>
+        <div class="rank-sub">${x.category || '未分类'} · ${marketLabel(x)}</div>
+        <div class="discover-two-col">
+          <div class="discover-box review-box">
+            <span class="box-label">入池判断</span>
+            <strong>${poolText}</strong>
+            <small>${x.reason || '等待审核'} · 状态：${status}</small>
+          </div>
+          <div class="discover-box score-box">
+            <span class="box-label">买入评分</span>
+            <strong>${buyScore < 0 ? '评分中' : `${fmtNumber(buyScore,1)}分 · ${buyLabel}`}</strong>
+            <small>价:${fmtNumber(x.price,3)} · ${fmtPct(x.pct,2)} · 数据:${dataStatus}</small>
+          </div>
+        </div>
       </div>
       <div class="rank-metrics">
-        <span class="score-badge ${cls}">${status}</span>
-        <span>${fmtNumber(x.price,3)}</span>
-        <small>${fmtPct(x.pct,2)} · ${x.time || '--'}</small>
+        <span class="score-badge ${discoverScoreClass(x)}">${buyScore < 0 ? '--' : fmtNumber(buyScore,1)}</span>
+        <span>${mode === 'review' ? poolText : buyLabel}</span>
+        <small>${status} · ${dataStatus}</small>
       </div>
     </button>`;
   }).join('');
@@ -239,6 +283,31 @@ function renderDiscoverList() {
     };
   });
 }
+
+async function scoreDiscoveredEtfs() {
+  const pending = discoverResults.filter(x => x.status === 'pending');
+  const concurrency = 6;
+  let cursor = 0;
+  async function worker() {
+    while (cursor < pending.length) {
+      const item = pending[cursor++];
+      try {
+        const data = await api(`/api/quote?code=${encodeURIComponent(item.code)}`);
+        item.score = data.score || {score: 0, level: '暂无评分'};
+        item.quote = data.quote || {status: 'single_source'};
+        item.history_metrics = data.history_metrics || {};
+        item.reason = `${item.reason || '待审核'}；评分：${item.score.score}，${item.score.level || ''}`;
+      } catch (e) {
+        item.score = {score: 0, level: '评分失败'};
+        item.quote = {status: 'unavailable', reason: e.message};
+      }
+      renderDiscoverList();
+    }
+  }
+  await Promise.all(Array.from({length: Math.min(concurrency, pending.length)}, () => worker()));
+  renderDiscoverList();
+}
+
 async function discoverEtfs() {
   const root = $('discoverList');
   const summary = $('discoverSummary');
@@ -246,9 +315,10 @@ async function discoverEtfs() {
   if (summary) summary.textContent = '正在抓取候选ETF并做初步分类，请稍等。';
   try {
     const data = await api('/api/discover');
-    discoverResults = data.items || [];
+    discoverResults = (data.items || []).map(x => ({...x, score: x.status === 'excluded' ? {score:0, level:'已剔除'} : null}));
     renderDiscoverCategoryOptions(discoverResults);
     renderDiscoverList();
+    scoreDiscoveredEtfs();
   } catch(e) {
     if (root) root.textContent = `发现失败：${e.message}`;
   }
@@ -276,6 +346,19 @@ function fmtMaybePct(n, digits = 2) {
 }
 function fmtMaybeNumber(n, digits = 2, suffix = '') {
   return n === null || n === undefined || Number.isNaN(Number(n)) ? '未填/暂无' : `${fmtNumber(n, digits)}${suffix}`;
+}
+function rollingPeValue(t) {
+  const mm = t.manual_metrics || {};
+  if (mm.rolling_pe !== undefined && mm.rolling_pe !== null) return mm.rolling_pe;
+  if (mm.pe !== undefined && mm.pe !== null) return mm.pe;
+  return null;
+}
+function rollingPePercentile(t) {
+  const mm = t.manual_metrics || {};
+  if (mm.rolling_pe_percentile !== undefined && mm.rolling_pe_percentile !== null) return mm.rolling_pe_percentile;
+  if (mm.pe_percentile !== undefined && mm.pe_percentile !== null) return mm.pe_percentile;
+  if (mm.valuation_percentile !== undefined && mm.valuation_percentile !== null) return mm.valuation_percentile;
+  return null;
 }
 function fmtBool(v) {
   return v ? '是' : '否';
@@ -513,6 +596,23 @@ function setScore(score) {
   else if (val >= 80) color = '#16a34a';
   $('scoreRing').style.background = `conic-gradient(${color} ${deg}deg, #e5e7eb ${deg}deg)`;
 }
+
+async function renderSingleHoldings(code) {
+  const root = $('singleHoldings');
+  if (!root) return;
+  root.className = 'single-holdings empty';
+  root.textContent = '正在抓取Top 10持仓...';
+  try {
+    const data = await api(`/api/holdings?code=${encodeURIComponent(code)}`);
+    const date = data.date ? `持仓截止：${data.date}` : '持仓日期：暂无';
+    root.className = 'single-holdings';
+    root.innerHTML = `<div class="holding-meta">来源：${data.source || '公开持仓数据'} · ${date}</div>${renderHoldings(data.holdings || [])}`;
+  } catch (e) {
+    root.className = 'single-holdings empty';
+    root.textContent = `Top 10持仓抓取失败：${e.message}`;
+  }
+}
+
 function renderResult(data) {
   const t = data.template || {};
   const q = data.quote || {};
@@ -537,6 +637,7 @@ function renderResult(data) {
   renderRawMetrics(data);
   renderComponents(s.components || {});
   renderSources(q);
+  renderSingleHoldings(data.code);
 }
 function renderRisks(tags) {
   const root = $('riskTags');
@@ -575,7 +676,13 @@ function renderRawMetrics(data) {
   rows.push(metricItem('成交额', fmtAmount(p.amount)));
 
   rows.push(metricItem('52周最低/最高', `${fmtMaybeNumber(h.low_52w, 3)} / ${fmtMaybeNumber(h.high_52w, 3)}`));
-  rows.push(metricItem('52周价格分位', fmtMaybePct(h.price_percentile_52w, 1), '越低代表越接近近一年低位'));
+  rows.push(metricItem('滚动PE', fmtMaybeNumber(rollingPeValue(t), 2, '倍'), '模板慢频数据，后续可接估值源'));
+  rows.push(metricItem('滚动PE分位', fmtMaybePct(rollingPePercentile(t), 1), '越低代表估值越低'));
+  rows.push(metricItem('1年价格分位', fmtMaybePct(h.price_percentile_52w, 1), '越低代表越接近近一年低位'));
+  rows.push(metricItem('2年价格分位', fmtMaybePct(h.price_percentile_2y, 1)));
+  rows.push(metricItem('3年价格分位', fmtMaybePct(h.price_percentile_3y, 1)));
+  rows.push(metricItem('5年价格分位', fmtMaybePct(h.price_percentile_5y, 1)));
+  rows.push(metricItem('10年价格分位', fmtMaybePct(h.price_percentile_10y, 1)));
   rows.push(metricItem('20日均线', fmtMaybeNumber(h.ma20, 3)));
   rows.push(metricItem('60日均线', fmtMaybeNumber(h.ma60, 3)));
   rows.push(metricItem('近一年波动率', fmtMaybePct(h.annual_volatility_pct, 1)));
@@ -722,7 +829,7 @@ function renderPoolRankList(items = poolResults) {
     }
     return true;
   }).sort((a,b) => Number(b.score?.score || 0) - Number(a.score?.score || 0));
-  if (summary) summary.textContent = `当前显示 ${list.length} / ${poolResults.length || Object.keys(templates).length} 只；按评分降序排列。评分即推荐买入值。`;
+  if (summary) summary.textContent = `当前显示 ${list.length} / ${poolResults.length || Object.keys(templates).length} 只；默认按推荐买入值展示Top排序。`;
   if (!list.length) { root.className = 'pool-rank-list empty'; root.textContent = scanningPool ? '正在扫描...' : '暂无符合条件的数据'; return; }
   root.className = 'pool-rank-list';
   root.innerHTML = list.map((d, idx) => {
@@ -797,7 +904,7 @@ $('detailPageBtn').onclick = () => switchPage('detail');
 $('discoverPageBtn').onclick = () => switchPage('discover');
 $('indexPageBtn').onclick = () => switchPage('index');
 ['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
-['discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
+['discoverModeFilter','discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
 ['indexCategoryFilter','indexMarketFilter','indexScoreFilter','indexRecommendFilter','indexSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'indexSearch' ? 'input' : 'change', () => renderIndexRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
