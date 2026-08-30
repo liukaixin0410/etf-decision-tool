@@ -190,3 +190,17 @@ body[data-page="discover"] .index-page { display:none; }
 .index-dimension strong, .index-component strong { color:#0f172a; font-size:15px; }
 .index-components { margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; }
 .index-component { background:#eef6ff; border:1px solid #bfdbfe; border-radius:12px; padding:9px 10px; }
+
+.single-holdings { display:block; }
+.holding-meta { color:#64748b; font-size:13px; margin-bottom:10px; line-height:1.4; }
+.single-holdings .holdings-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+.discover-card-split { align-items:stretch; }
+.discover-two-col { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; margin-top:8px; }
+.discover-box { border:1px solid #e2e8f0; border-radius:12px; padding:10px; background:#fff; }
+.discover-box .box-label { display:block; color:#64748b; font-size:12px; margin-bottom:5px; }
+.discover-box strong { display:block; color:#0f172a; font-size:15px; line-height:1.35; }
+.discover-box small { display:block; color:#64748b; margin-top:5px; line-height:1.4; }
+.review-box { background:#f8fafc; }
+.score-box { background:#eff6ff; border-color:#bfdbfe; }
+@media (max-width: 760px) { .discover-two-col { grid-template-columns:1fr; } }

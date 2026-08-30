@@ -39,7 +39,7 @@
     </div>
     <div class="top-note">
       <strong>默认看推荐候选</strong>
-      <span>先扫核心池，按“推荐买入值”降序；免费数据异常时不做买入判断。</span>
+      <span>打开后默认扫描核心池Top排序；免费数据异常时不做买入判断。</span>
     </div>
   </section>
 
@@ -57,11 +57,12 @@
         <label><span>ETF池</span><select id="poolFilter"><option value="core" selected>核心池</option><option value="extended">扩展池</option><option value="all">全部</option></select></label>
         <label><span>类别</span><select id="categoryFilter"><option value="all">全部类别</option></select></label>
         <label><span>市场</span><select id="marketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>指数属性</span><select id="indexNatureFilter"><option value="all">全部</option><option value="custom">定制指数基金</option><option value="standard">主流宽基指数</option></select></label>
         <label><span>评分</span><select id="scoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="60">60-65分</option><option value="50">50-60分</option><option value="0">50分以下/暂停</option></select></label>
-        <label><span>推荐程度</span><select id="recommendFilter"><option value="recommended" selected>默认：推荐候选</option><option value="all">全部</option><option value="buy">小底仓以上</option><option value="cautious">谨慎小底仓</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
+        <label><span>推荐程度</span><select id="recommendFilter"><option value="all" selected>默认：Top排序</option><option value="recommended">推荐候选</option><option value="buy">小底仓以上</option><option value="cautious">谨慎小底仓</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
         <label><span>搜索</span><input id="poolSearch" placeholder="代码/名称/指数" /></label>
       </div>
-      <div id="poolSummary" class="pool-summary">点击“扫描并排序”后，系统会拉取当前行情并按评分排序。</div>
+      <div id="poolSummary" class="pool-summary">打开页面后会自动扫描核心池，并按评分展示Top排序；也可以手动切换筛选条件后重新扫描。</div>
       <div id="poolRankList" class="pool-rank-list empty">暂无排行数据</div>
     </section>
 
@@ -69,15 +70,17 @@
       <div class="pool-head">
         <div>
           <h2>ETF自动发现 / 待审核池</h2>
-          <p>自动从候选ETF中识别股票型ETF，先放入待审核或剔除池；不自动纳入核心/扩展池，避免误加。</p>
+          <p>先判断“能不能进池”，再判断“现在值不值得买”。默认展示待审核ETF的买入评分排行。</p>
         </div>
         <button id="discoverBtn" class="primary compact-btn">发现新ETF</button>
       </div>
       <div class="pool-filters">
+        <label><span>展示模式</span><select id="discoverModeFilter"><option value="score" selected>买入评分排行</option><option value="review">入池审核</option></select></label>
         <label><span>发现状态</span><select id="discoverStatusFilter"><option value="pending" selected>默认：待审核</option><option value="all">全部</option><option value="excluded">已剔除</option></select></label>
         <label><span>建议池</span><select id="discoverPoolFilter"><option value="core" selected>默认：建议核心池</option><option value="extended">建议扩展池</option><option value="all">全部</option></select></label>
         <label><span>类别</span><select id="discoverCategoryFilter"><option value="all">全部类别</option></select></label>
         <label><span>市场</span><select id="discoverMarketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>指数属性</span><select id="discoverNatureFilter"><option value="all">全部</option><option value="custom">定制指数基金</option><option value="standard">主流宽基指数</option></select></label>
         <label><span>质量</span><select id="discoverQualityFilter"><option value="stock">股票型候选</option><option value="all">全部含剔除</option></select></label>
         <label><span>搜索</span><input id="discoverSearch" placeholder="代码/名称/原因" /></label>
       </div>
@@ -96,6 +99,7 @@
       <div class="pool-filters">
         <label><span>类别</span><select id="indexCategoryFilter"><option value="all">全部类别</option></select></label>
         <label><span>市场</span><select id="indexMarketFilter"><option value="all">全部市场</option><option value="cn">A股场内</option><option value="hk_cross">港股/港股通/中概</option><option value="us">美股本土</option><option value="qdii">QDII/跨境</option></select></label>
+        <label><span>指数属性</span><select id="indexNaturePageFilter"><option value="all">全部</option><option value="custom">定制指数基金</option><option value="standard">主流宽基指数</option></select></label>
         <label><span>评分</span><select id="indexScoreFilter"><option value="all">全部评分</option><option value="80">80分以上</option><option value="65">65-80分</option><option value="60">60-65分</option><option value="50">50-60分</option><option value="0">50分以下/暂停</option></select></label>
         <label><span>推荐程度</span><select id="indexRecommendFilter"><option value="recommended" selected>默认：推荐候选</option><option value="all">全部</option><option value="buy">小底仓以上</option><option value="cautious">谨慎小底仓</option><option value="watch">观察等待</option><option value="avoid">暂不买/暂停</option></select></label>
         <label><span>搜索</span><input id="indexSearch" placeholder="指数/ETF/代码" /></label>
@@ -133,6 +137,11 @@
     <section class="panel wide page-section detail-page">
       <h2>核心数值</h2>
       <div id="rawMetrics" class="raw-metrics empty">暂无数据</div>
+    </section>
+
+    <section class="panel wide page-section detail-page">
+      <h2>Top 10 成分股 / 持仓占比</h2>
+      <div id="singleHoldings" class="single-holdings empty">暂无数据</div>
     </section>
 
     <section class="panel page-section detail-page">

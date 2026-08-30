@@ -48,6 +48,40 @@ async function historyTencentCN(code, market){
   const rows = block.qfqday || block.day || [];
   return rows.map(r => ({date:r[0], open:safeFloat(r[1]), close:safeFloat(r[2]), high:safeFloat(r[3]), low:safeFloat(r[4]), volume:safeFloat(r[5]), amount:null}));
 }
+
+async function historyEastmoneyCN(code, market){
+  const secid = (market === 'cn_sh' ? '1.' : '0.') + code;
+  const params = new URLSearchParams({
+    secid,
+    fields1: 'f1,f2,f3,f4,f5,f6',
+    fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61',
+    klt: '101',
+    fqt: '1',
+    beg: '0',
+    end: '20500101',
+    lmt: '2600'
+  });
+  const text = await fetchText('https://push2his.eastmoney.com/api/qt/stock/kline/get?' + params.toString(), {'Referer':'https://quote.eastmoney.com/','Accept':'application/json,text/plain,*/*'});
+  const data = JSON.parse(text).data || {};
+  const rows = (data.klines || []).map(line => {
+    const p = String(line).split(',');
+    return {date:p[0], open:safeFloat(p[1]), close:safeFloat(p[2]), high:safeFloat(p[3]), low:safeFloat(p[4]), volume:safeFloat(p[5]), amount:safeFloat(p[6])};
+  }).filter(r => r.close !== null);
+  return rows;
+}
+async function historyCN(code, market){
+  const errors = [];
+  for (const fn of [historyTencentCN, historyEastmoneyCN]) {
+    try {
+      const rows = await fn(code, market);
+      if (rows && rows.length) return rows;
+      errors.push(`${fn.name}: empty`);
+    } catch(e) {
+      errors.push(`${fn.name}: ${e.message}`);
+    }
+  }
+  throw new Error(errors.join('; '));
+}
 async function quoteNasdaqUS(code){
   const text = await fetchText(`https://api.nasdaq.com/api/quote/${code}/info?assetclass=etf`, {'Accept':'application/json,text/plain,*/*','Referer':'https://www.nasdaq.com/'});
   const data = JSON.parse(text).data || {};
@@ -118,14 +152,15 @@ function buildScore(template, quote, hist){
     comps = {'估值分位':inv(mm.valuation_percentile),'52周价格分位':scorePricePercentile(hist.price_percentile_52w),'盈利趋势':mm.earnings_trend_score??55,'基金规模':scoreSize(template.fund_size_billion),'成交额流动性':scoreAmount(primary.amount),'折溢价':55,'波动率':scoreVol(hist.annual_volatility_pct),'政策/汇率风险':mm.policy_risk_score??55,'费率':scoreExp(template.expense_ratio),'数据可信度':100-dataPenalty(st)};
     base=weighted([[comps['估值分位'],22],[comps['52周价格分位'],14],[comps['盈利趋势'],13],[comps['基金规模'],9],[comps['成交额流动性'],9],[comps['折溢价'],9],[comps['波动率'],6],[comps['政策/汇率风险'],6],[comps['费率'],5],[comps['数据可信度'],7]]);
   }
-  const score = Math.max(0, Math.min(100, base - dataPenalty(st)));
+  const historyPenalty = hist && hist.ok === false ? 15 : 0;
+  const score = Math.max(0, Math.min(100, base - dataPenalty(st) - historyPenalty));
   let level, action, first=0, max=0;
   if(['conflict','unavailable'].includes(st)){ level='暂停判断'; action='数据源不可用或冲突，今天不要依据本工具下单。'; }
   else if(score>=80){ level='积极建仓'; action='数据较好，可分批买入计划仓位的40%-50%，仍不要一次满仓。'; first=45; max=100; }
   else if(score>=65){ level='小底仓'; action='有一定吸引力，适合买计划仓位的20%-30%，后续按回调或趋势确认加仓。'; first=25; max=70; }
   else if(score>=50){ level='观察等待'; action='数据一般，先观察；若已有仓位，不建议追高加仓。'; max=30; }
   else { level='暂不买入'; action='风险或估值/价格位置不理想，暂不建议新买入。'; }
-  const risks = Array.from(new Set([...(template.risk_tags||[]), st==='single_source'?'仅单一免费数据源可用':null, hist.annual_volatility_pct>25?'近一年波动率较高':null, hist.price_percentile_52w>70?'52周价格位置偏高':null].filter(Boolean)));
+  const risks = Array.from(new Set([...(template.risk_tags||[]), st==='single_source'?'仅单一免费数据源可用':null, hist.annual_volatility_pct>25?'近一年波动率较高':null, hist.price_percentile_52w>70?'52周价格位置偏高':null, hist && hist.ok === false ? '历史行情不可用，价格分位/波动率/回撤不可用' : null].filter(Boolean)));
   return {score:Math.round(score*10)/10, level, action, first_buy_ratio_pct:first, max_position_ratio_pct:max, components: Object.fromEntries(Object.entries(comps).map(([k,v])=>[k, Math.round(v*10)/10])), risk_tags:risks};
 }
 async function getQuote(code, template){
@@ -144,7 +179,7 @@ exports.handler = async (event) => {
   const template = templates[code] || {code, name:code, market:marketForCode(code), type:'growth', tracking_index:'未配置', manual_metrics:{}, risk_tags:['未配置模板，估值数据缺失']};
   let quote, hist;
   try{ quote = await getQuote(code, template); }catch(e){ quote={status:'unavailable', reason:e.message, primary:null, quotes:[], errors:[{error:e.message}], market:template.market}; }
-  try{ const rows = template.market==='us' ? await historyNasdaqUS(code) : await historyTencentCN(code, template.market); hist=computeHistory(rows, quote.primary?.price); }catch(e){ hist={ok:false,error:e.message}; }
+  try{ const rows = template.market==='us' ? await historyNasdaqUS(code) : await historyCN(code, template.market); hist=computeHistory(rows, quote.primary?.price); }catch(e){ hist={ok:false,error:e.message}; }
   const score = buildScore(template, quote, hist);
   return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':'*'}, body:JSON.stringify({code, template, quote, history_metrics:hist, score, fetched_at:nowIso(), disclaimer:'免费数据源仅供辅助判断；数据源冲突、过期或不可用时请勿依据本工具下单。'}, null, 2)};
 };

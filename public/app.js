@@ -26,11 +26,13 @@ function groupedIndexes() {
 function indexFilteredGroups() {
   const cat = $('indexCategoryFilter')?.value || 'all';
   const market = $('indexMarketFilter')?.value || 'all';
+  const nature = $('indexNaturePageFilter')?.value || 'all';
   const text = ($('indexSearch')?.value || '').trim().toLowerCase();
   return groupedIndexes().filter(g => {
     const r = g.representative || {};
     if (cat !== 'all' && categoryOf(r) !== cat) return false;
     if (market !== 'all' && marketGroup(r) !== market) return false;
+    if (nature !== 'all' && (isCustomIndex(r) ? 'custom' : 'standard') !== nature) return false;
     if (text) {
       const hay = `${g.indexName} ${g.etfs.map(x => `${x.code} ${x.name}`).join(' ')}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -64,6 +66,7 @@ function renderIndexDimensions(d) {
   rows.push(['指数类别', categoryOf(t)]);
   rows.push(['市场', marketLabel(t)]);
   rows.push(['同指数ETF数量', `${(d.etfs || []).length}只`]);
+  rows.push(['指数属性', indexNatureLabel(t)]);
   rows.push(['代表ETF规模', t.fund_size_billion == null ? '未配置' : `${fmtNumber(t.fund_size_billion, 2)}亿元`]);
   rows.push(['综合费率', fmtMaybePct(t.expense_ratio, 2)]);
   rows.push(['滚动PE', fmtMaybeNumber(rollingPeValue(t), 2, '倍')]);
@@ -104,6 +107,7 @@ function renderIndexRankList(items = indexResults) {
   const cat = $('indexCategoryFilter')?.value || 'all';
   const market = $('indexMarketFilter')?.value || 'all';
   const scoreF = $('indexScoreFilter')?.value || 'all';
+  const nature = $('indexNaturePageFilter')?.value || 'all';
   const rec = $('indexRecommendFilter')?.value || 'all';
   const text = ($('indexSearch')?.value || '').trim().toLowerCase();
   let list = items.filter(d => {
@@ -113,6 +117,7 @@ function renderIndexRankList(items = indexResults) {
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
     if (market !== 'all' && marketGroup(t) !== market) return false;
     if (scoreF !== 'all' && scoreBucket(score, d.quote?.status) !== scoreF) return false;
+    if (nature !== 'all' && (isCustomIndex(t) ? 'custom' : 'standard') !== nature) return false;
     if (rec === 'recommended' && !['buy','cautious'].includes(bucket)) return false;
     if (rec !== 'all' && rec !== 'recommended' && bucket !== rec) return false;
     if (text) {
@@ -135,7 +140,7 @@ function renderIndexRankList(items = indexResults) {
         <div class="rank-no">#${idx + 1}</div>
         <div class="index-title-block">
           <h3>${d.indexName}</h3>
-          <p>${categoryOf(t)} · ${marketLabel(t)} · 代表ETF：${t.code} ${t.name || ''}</p>
+          <p>${categoryOf(t)} · ${marketLabel(t)} · ${indexNatureLabel(t)} · 代表ETF：${t.code} ${t.name || ''}</p>
           <p class="index-related">同指数ETF：${related}</p>
         </div>
         <div class="rank-metrics">
@@ -217,6 +222,7 @@ function renderDiscoverList() {
   const cat = $('discoverCategoryFilter')?.value || 'all';
   const market = $('discoverMarketFilter')?.value || 'all';
   const quality = $('discoverQualityFilter')?.value || 'stock';
+  const nature = $('discoverNatureFilter')?.value || 'all';
   const text = ($('discoverSearch')?.value || '').trim().toLowerCase();
   let list = discoverResults.filter(x => {
     if (st !== 'all' && x.status !== st) return false;
@@ -224,6 +230,7 @@ function renderDiscoverList() {
     if (cat !== 'all' && x.category !== cat) return false;
     if (market !== 'all' && marketGroup(x) !== market) return false;
     if (quality === 'stock' && x.status === 'excluded') return false;
+    if (nature !== 'all' && (isCustomIndex(x) ? 'custom' : 'standard') !== nature) return false;
     if (text) {
       const hay = `${x.code} ${x.name} ${x.reason} ${x.category || ''}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -251,7 +258,7 @@ function renderDiscoverList() {
       <div class="rank-no">#${idx + 1}</div>
       <div class="rank-main">
         <div class="rank-title"><strong>${x.code}</strong><span>${x.name || ''}</span></div>
-        <div class="rank-sub">${x.category || '未分类'} · ${marketLabel(x)}</div>
+        <div class="rank-sub">${x.category || '未分类'} · ${marketLabel(x)} · ${indexNatureLabel(x)}</div>
         <div class="discover-two-col">
           <div class="discover-box review-box">
             <span class="box-label">入池判断</span>
@@ -374,6 +381,15 @@ function categoryOf(t) {
 }
 function poolOf(t) {
   return t.pool || 'core';
+}
+function isCustomIndex(t) {
+  if (!t) return false;
+  if (t.index_nature) return t.index_nature === 'custom';
+  const idx = t.tracking_index || '';
+  return /红利|低波|高股息|半导体|芯片|科技|互联网|医疗|医药|消费|新能源|证券|券商|军工|有色|煤炭|基建|云计算|人工智能|通信|游戏|传媒|港股通/.test(idx);
+}
+function indexNatureLabel(t) {
+  return isCustomIndex(t) ? '定制指数基金' : '主流宽基指数';
 }
 function marketGroup(t) {
   if (t.market === 'us') return 'us';
@@ -663,6 +679,7 @@ function renderRawMetrics(data) {
 
   rows.push(metricItem('ETF代码', data.code || '--', t.name || ''));
   rows.push(metricItem('跟踪指数', t.tracking_index || '未配置'));
+  rows.push(metricItem('指数属性', indexNatureLabel(t), isCustomIndex(t) ? '行业/主题/策略/因子等非传统宽基' : '主流宽基或旗舰指数')); 
   rows.push(metricItem('ETF类型', displayType(t.type))); 
   rows.push(metricItem('是否QDII', fmtBool(t.is_qdii), t.is_qdii ? '净值和折溢价可能滞后' : ''));
   rows.push(metricItem('是否跨境/港股相关', fmtBool(t.is_cross_border)));
@@ -791,11 +808,13 @@ function filteredTemplates() {
   const pool = $('poolFilter')?.value || 'all';
   const cat = $('categoryFilter')?.value || 'all';
   const market = $('marketFilter')?.value || 'all';
+  const nature = $('indexNatureFilter')?.value || 'all';
   const text = ($('poolSearch')?.value || '').trim().toLowerCase();
   return Object.values(templates).filter(t => {
     if (pool !== 'all' && poolOf(t) !== pool) return false;
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
     if (market !== 'all' && marketGroup(t) !== market) return false;
+    if (nature !== 'all' && (isCustomIndex(t) ? 'custom' : 'standard') !== nature) return false;
     if (text) {
       const hay = `${t.code} ${t.name} ${t.tracking_index} ${categoryOf(t)}`.toLowerCase();
       if (!hay.includes(text)) return false;
@@ -812,6 +831,7 @@ function renderPoolRankList(items = poolResults) {
   const rec = $('recommendFilter')?.value || 'all';
   const market = $('marketFilter')?.value || 'all';
   const scoreF = $('scoreFilter')?.value || 'all';
+  const nature = $('indexNatureFilter')?.value || 'all';
   const text = ($('poolSearch')?.value || '').trim().toLowerCase();
   let list = items.filter(d => {
     const t = d.template || {};
@@ -821,6 +841,7 @@ function renderPoolRankList(items = poolResults) {
     if (cat !== 'all' && categoryOf(t) !== cat) return false;
     if (market !== 'all' && marketGroup(t) !== market) return false;
     if (scoreF !== 'all' && scoreBucket(Number(s.score || 0), d.quote?.status) !== scoreF) return false;
+    if (nature !== 'all' && (isCustomIndex(t) ? 'custom' : 'standard') !== nature) return false;
     if (rec === 'recommended' && !['buy','cautious'].includes(bucket)) return false;
     if (rec !== 'all' && rec !== 'recommended' && bucket !== rec) return false;
     if (text) {
@@ -846,7 +867,7 @@ function renderPoolRankList(items = poolResults) {
       <div class="rank-no">#${idx + 1}</div>
       <div class="rank-main">
         <div class="rank-title"><strong>${d.code}</strong><span>${t.name || ''}</span></div>
-        <div class="rank-sub">${categoryOf(t)} · ${marketLabel(t)} · ${t.tracking_index || '未配置指数'} · ${badge}</div>
+        <div class="rank-sub">${categoryOf(t)} · ${marketLabel(t)} · ${indexNatureLabel(t)} · ${t.tracking_index || '未配置指数'} · ${badge}</div>
         <div class="rank-reason">${shortReason(d)}</div>
       </div>
       <div class="rank-metrics">
@@ -903,9 +924,9 @@ $('rankPageBtn').onclick = () => switchPage('rank');
 $('detailPageBtn').onclick = () => switchPage('detail');
 $('discoverPageBtn').onclick = () => switchPage('discover');
 $('indexPageBtn').onclick = () => switchPage('index');
-['poolFilter','categoryFilter','marketFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
-['discoverModeFilter','discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
-['indexCategoryFilter','indexMarketFilter','indexScoreFilter','indexRecommendFilter','indexSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'indexSearch' ? 'input' : 'change', () => renderIndexRankList()); });
+['poolFilter','categoryFilter','marketFilter','indexNatureFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
+['discoverModeFilter','discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverNatureFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
+['indexCategoryFilter','indexMarketFilter','indexNaturePageFilter','indexScoreFilter','indexRecommendFilter','indexSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'indexSearch' ? 'input' : 'change', () => renderIndexRankList()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
