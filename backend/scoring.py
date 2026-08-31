@@ -189,9 +189,15 @@ def score_growth(template: Dict[str, Any], quote: Dict[str, Any], hist: Dict[str
 
 
 def build_result(score: float, components: Dict[str, float], template: Dict[str, Any], quote: Dict[str, Any], hist: Dict[str, Any]) -> Dict[str, Any]:
+    history_missing = hist.get("ok") is False
     if quote.get("status") in {"conflict", "unavailable"}:
         level = "暂停判断"
         action = "数据源不可用或冲突，今天不要依据本工具下单。"
+        first_ratio = 0
+        max_ratio = 0
+    elif history_missing:
+        level = "数据不足"
+        action = "历史行情未抓到，价格分位/波动率/回撤不可用；暂不输出买入建议，需先修复数据或用券商/权威源核对。"
         first_ratio = 0
         max_ratio = 0
     elif score >= 80:
@@ -227,6 +233,7 @@ def build_result(score: float, components: Dict[str, float], template: Dict[str,
         risks.append("免费数据源价格冲突")
     return {
         "score": round(score, 1),
+        "score_reliable": not history_missing,
         "level": level,
         "action": action,
         "first_buy_ratio_pct": first_ratio,

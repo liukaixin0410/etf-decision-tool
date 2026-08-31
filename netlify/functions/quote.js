@@ -41,12 +41,19 @@ async function quoteTencentCN(code, market){
 }
 async function historyTencentCN(code, market){
   const symbol = tencentSymbol(code, market);
-  const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + encodeURIComponent(`${symbol},day,,,2600,qfq`);
-  const text = await fetchText(url, {'Referer':'https://gu.qq.com/'});
-  const data = JSON.parse(text).data || {};
-  const block = data[symbol] || {};
-  const rows = block.qfqday || block.day || [];
-  return rows.map(r => ({date:r[0], open:safeFloat(r[1]), close:safeFloat(r[2]), high:safeFloat(r[3]), low:safeFloat(r[4]), volume:safeFloat(r[5]), amount:null}));
+  const errors = [];
+  for (const limit of [2600, 1200, 520, 320]) {
+    try {
+      const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + encodeURIComponent(`${symbol},day,,,${limit},qfq`);
+      const text = await fetchText(url, {'Referer':'https://gu.qq.com/'});
+      const data = JSON.parse(text).data || {};
+      const block = data[symbol] || {};
+      const rows = (block.qfqday || block.day || []).map(r => ({date:r[0], open:safeFloat(r[1]), close:safeFloat(r[2]), high:safeFloat(r[3]), low:safeFloat(r[4]), volume:safeFloat(r[5]), amount:null})).filter(r => r.close !== null);
+      if (rows.length) return rows;
+      errors.push(`limit ${limit}: empty`);
+    } catch(e) { errors.push(`limit ${limit}: ${e.message}`); }
+  }
+  throw new Error(errors.join('; '));
 }
 
 async function historyEastmoneyCN(code, market){
@@ -69,9 +76,24 @@ async function historyEastmoneyCN(code, market){
   }).filter(r => r.close !== null);
   return rows;
 }
+
+async function historySinaCN(code, market){
+  const symbol = (market === 'cn_sh' ? 'sh' : 'sz') + code;
+  const errors = [];
+  for (const len of [2600, 1200, 520, 320]) {
+    try {
+      const url = `https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol=${symbol}&scale=240&ma=no&datalen=${len}`;
+      const text = await fetchText(url, {'Referer':'https://finance.sina.com.cn/','Accept':'application/json,text/plain,*/*'});
+      const rows = JSON.parse(text).map(r => ({date:r.day, open:safeFloat(r.open), close:safeFloat(r.close), high:safeFloat(r.high), low:safeFloat(r.low), volume:safeFloat(r.volume), amount:null})).filter(r => r.close !== null);
+      if (rows.length) return rows;
+      errors.push(`len ${len}: empty`);
+    } catch(e) { errors.push(`len ${len}: ${e.message}`); }
+  }
+  throw new Error(errors.join('; '));
+}
 async function historyCN(code, market){
   const errors = [];
-  for (const fn of [historyTencentCN, historyEastmoneyCN]) {
+  for (const fn of [historyTencentCN, historyEastmoneyCN, historySinaCN]) {
     try {
       const rows = await fn(code, market);
       if (rows && rows.length) return rows;
@@ -152,16 +174,17 @@ function buildScore(template, quote, hist){
     comps = {'估值分位':inv(mm.valuation_percentile),'52周价格分位':scorePricePercentile(hist.price_percentile_52w),'盈利趋势':mm.earnings_trend_score??55,'基金规模':scoreSize(template.fund_size_billion),'成交额流动性':scoreAmount(primary.amount),'折溢价':55,'波动率':scoreVol(hist.annual_volatility_pct),'政策/汇率风险':mm.policy_risk_score??55,'费率':scoreExp(template.expense_ratio),'数据可信度':100-dataPenalty(st)};
     base=weighted([[comps['估值分位'],22],[comps['52周价格分位'],14],[comps['盈利趋势'],13],[comps['基金规模'],9],[comps['成交额流动性'],9],[comps['折溢价'],9],[comps['波动率'],6],[comps['政策/汇率风险'],6],[comps['费率'],5],[comps['数据可信度'],7]]);
   }
-  const historyPenalty = hist && hist.ok === false ? 15 : 0;
-  const score = Math.max(0, Math.min(100, base - dataPenalty(st) - historyPenalty));
+  const historyMissing = hist && hist.ok === false;
+  const score = Math.max(0, Math.min(100, base - dataPenalty(st)));
   let level, action, first=0, max=0;
   if(['conflict','unavailable'].includes(st)){ level='暂停判断'; action='数据源不可用或冲突，今天不要依据本工具下单。'; }
+  else if(historyMissing){ level='数据不足'; action='历史行情未抓到，价格分位/波动率/回撤不可用；暂不输出买入建议，需先修复数据或用券商/权威源核对。'; }
   else if(score>=80){ level='积极建仓'; action='数据较好，可分批买入计划仓位的40%-50%，仍不要一次满仓。'; first=45; max=100; }
   else if(score>=65){ level='小底仓'; action='有一定吸引力，适合买计划仓位的20%-30%，后续按回调或趋势确认加仓。'; first=25; max=70; }
   else if(score>=50){ level='观察等待'; action='数据一般，先观察；若已有仓位，不建议追高加仓。'; max=30; }
   else { level='暂不买入'; action='风险或估值/价格位置不理想，暂不建议新买入。'; }
   const risks = Array.from(new Set([...(template.risk_tags||[]), st==='single_source'?'仅单一免费数据源可用':null, hist.annual_volatility_pct>25?'近一年波动率较高':null, hist.price_percentile_52w>70?'52周价格位置偏高':null, hist && hist.ok === false ? '历史行情不可用，价格分位/波动率/回撤不可用' : null].filter(Boolean)));
-  return {score:Math.round(score*10)/10, level, action, first_buy_ratio_pct:first, max_position_ratio_pct:max, components: Object.fromEntries(Object.entries(comps).map(([k,v])=>[k, Math.round(v*10)/10])), risk_tags:risks};
+  return {score:Math.round(score*10)/10, score_reliable: !historyMissing, level, action, first_buy_ratio_pct:first, max_position_ratio_pct:max, components: Object.fromEntries(Object.entries(comps).map(([k,v])=>[k, Math.round(v*10)/10])), risk_tags:risks};
 }
 async function getQuote(code, template){
   const market = template.market || ( /^\d+$/.test(code) ? marketForCode(code) : 'us'); const quotes=[]; const errors=[];

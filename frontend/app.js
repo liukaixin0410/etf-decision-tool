@@ -132,7 +132,7 @@ function renderIndexRankList(items = indexResults) {
   root.innerHTML = list.map((d, idx) => {
     const t = d.representative || {};
     const score = Number(d.score?.score || 0);
-    const degree = recommendationDegree(score, d.quote?.status);
+    const degree = effectiveRecommendationDegree(score, d.quote?.status, d.score?.score_reliable !== false);
     const related = d.etfs.map(x => x.code).join(' / ');
     const holdingsDate = d.holdings?.date ? ` · 持仓截止 ${d.holdings.date}` : '';
     return `<div class="index-card">
@@ -204,13 +204,13 @@ function discoverRecommendationLabel(x) {
   if (x.status === 'excluded') return '已剔除';
   const score = discoverScoreValue(x);
   if (score < 0) return '评分中';
-  return recommendationDegree(score, x.quote?.status || 'single_source').label;
+  return effectiveRecommendationDegree(score, x.quote?.status || 'single_source', x.score?.score_reliable !== false).label;
 }
 function discoverScoreClass(x) {
   if (x.status === 'excluded') return 'bad';
   const score = discoverScoreValue(x);
   if (score < 0) return 'neutral';
-  return recommendationDegree(score, x.quote?.status || 'single_source').cls;
+  return effectiveRecommendationDegree(score, x.quote?.status || 'single_source', x.score?.score_reliable !== false).cls;
 }
 function renderDiscoverList() {
   const root = $('discoverList');
@@ -486,6 +486,10 @@ function comparisonSummary(code) {
   };
   return map[c] || '暂无内置同类对比。后续可在模板中补充同指数/同类ETF。';
 }
+function effectiveRecommendationDegree(score, status, reliable = true) {
+  if (!reliable) return {label:'数据不足', cls:'bad', text:'历史行情缺失，评分不完整；暂不输出买入建议。'};
+  return recommendationDegree(score, status);
+}
 function recommendationDegree(score, status) {
   if (status === 'conflict' || status === 'unavailable') return {label:'不推荐', cls:'bad', text:'数据源不可用或冲突，先不做买入动作。'};
   if (score >= 80) return {label:'强推荐分批', cls:'strong', text:'数据较好，可考虑分批建立较完整仓位。'};
@@ -507,6 +511,7 @@ function buildReasons(data) {
   if (q.status === 'trusted') reasons.push('行情通过多源校验，数据可信度较高。');
   if (q.status === 'single_source') cautions.push('当前只有单一免费数据源可用，下单前建议用券商App再核对价格。');
   if (q.status === 'unavailable' || q.status === 'conflict') cautions.push('数据源不可用或冲突，工具暂停买入判断。');
+  if (s.score_reliable === false) cautions.push('历史行情缺失，价格分位、波动率、回撤不可用；该评分不应用作买入依据。');
   if (h.price_percentile_52w !== null && h.price_percentile_52w !== undefined) {
     if (h.price_percentile_52w <= 25) reasons.push(`52周价格分位约${fmtPct(h.price_percentile_52w,1)}，位置偏低。`);
     else if (h.price_percentile_52w >= 70) cautions.push(`52周价格分位约${fmtPct(h.price_percentile_52w,1)}，价格位置偏高。`);
@@ -535,7 +540,7 @@ function renderRecommendation(data) {
   const q = data.quote || {};
   const s = data.score || {};
   const score = Number(s.score || 0);
-  const degree = recommendationDegree(score, q.status);
+  const degree = effectiveRecommendationDegree(score, q.status, s.score_reliable !== false);
   const rc = buildReasons(data);
   const peers = getPeerGroup(data.code, t);
   root.className = 'recommendation-details';
@@ -860,7 +865,7 @@ function renderPoolRankList(items = poolResults) {
     const h = d.history_metrics || {};
     const s = d.score || {};
     const score = Number(s.score || 0);
-    const degree = recommendationDegree(score, q.status);
+    const degree = effectiveRecommendationDegree(score, q.status, s.score_reliable !== false);
     const badge = poolOf(t) === 'core' ? '核心' : '扩展';
     const statusText = q.status === 'trusted' ? '双源可信' : (q.status === 'single_source' ? '单源参考' : '数据异常');
     return `<button class="rank-card" data-code="${d.code}">

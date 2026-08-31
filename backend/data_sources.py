@@ -144,6 +144,36 @@ def history_tencent_cn(code: str, market: Optional[str] = None, days: int = 2600
     return rows
 
 
+
+def history_sina_cn(code: str, market: Optional[str] = None, days: int = 2600) -> List[Dict[str, Any]]:
+    market = market or market_for_code(code)
+    symbol = ('sh' if market == 'cn_sh' else 'sz') + code
+    last_error = None
+    for lmt in (days, 1200, 520, 320):
+        url = "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?" + urlencode({"symbol": symbol, "scale": "240", "ma": "no", "datalen": str(lmt)})
+        try:
+            text, _ = fetch_text(url, headers={"Referer": "https://finance.sina.com.cn/", "Accept": "application/json,text/plain,*/*"})
+            data = json.loads(text)
+            rows = []
+            for r in data:
+                rows.append({
+                    "date": r.get("day"),
+                    "open": safe_float(r.get("open")),
+                    "close": safe_float(r.get("close")),
+                    "high": safe_float(r.get("high")),
+                    "low": safe_float(r.get("low")),
+                    "volume": safe_float(r.get("volume")),
+                    "amount": None,
+                })
+            rows = [r for r in rows if r.get("close") is not None]
+            if rows:
+                return rows
+        except Exception as e:
+            last_error = e
+    if last_error:
+        raise last_error
+    return []
+
 def quote_eastmoney_cn(code: str, market: Optional[str] = None) -> Dict[str, Any]:
     secid = em_sec_id(code, market)
     fields = "f43,f44,f45,f46,f47,f48,f57,f58,f60,f169,f170,f116,f117,f118,f161,f162,f164,f168,f169,f170,f171,f292"
