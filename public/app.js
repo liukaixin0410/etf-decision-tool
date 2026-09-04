@@ -78,6 +78,10 @@ function renderIndexDimensions(d) {
   rows.push(['5年价格分位', fmtMaybePct(h.price_percentile_5y, 1)]);
   rows.push(['10年价格分位', fmtMaybePct(h.price_percentile_10y, 1)]);
   rows.push(['52周最低/最高', `${fmtMaybeNumber(h.low_52w, 3)} / ${fmtMaybeNumber(h.high_52w, 3)}`]);
+  rows.push(['1年年化收益率', fmtMaybePct(h.annualized_return_1y, 1)]);
+  rows.push(['3年年化收益率', fmtMaybePct(h.annualized_return_3y, 1)]);
+  rows.push(['5年年化收益率', fmtMaybePct(h.annualized_return_5y, 1)]);
+  rows.push(['10年年化收益率', fmtMaybePct(h.annualized_return_10y, 1)]);
   rows.push(['近一年波动率', fmtMaybePct(h.annual_volatility_pct, 1)]);
   rows.push(['近一年最大回撤', fmtMaybePct(h.max_drawdown_pct, 1)]);
   if (isDividend) {
@@ -151,6 +155,7 @@ function renderIndexRankList(items = indexResults) {
       </div>
       <div class="rank-reason index-reason">${shortReason(d)}</div>
       ${renderIndexDimensions(d)}
+      <div class="methodology-box"><strong>编制方案摘要</strong><p>${t.methodology_summary || '编制方案信息待补充。'}</p><small>${t.methodology_status || ''}${t.methodology_url ? ` · ${t.methodology_url}` : ''}</small></div>
       <div class="holdings-title">Top 10 成分股/持仓占比</div>
       ${renderHoldings(d.holdings?.holdings || [])}
     </div>`;
@@ -607,6 +612,16 @@ function renderCategoryOptions() {
   }
   select.dataset.ready = '1';
 }
+
+function goToLinkedIndex(indexName) {
+  switchPage('index');
+  const input = $('indexSearch');
+  if (input) input.value = indexName || '';
+  renderIndexRankList();
+  if (!indexResults.length) scanIndexes();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
 function setScore(score) {
   const val = Number(score);
   $('scoreValue').textContent = Number.isFinite(val) ? val.toFixed(0) : '--';
@@ -642,6 +657,12 @@ function renderResult(data) {
   const s = data.score || {};
   $('etfTitle').textContent = `${data.code} ${t.name || ''}`;
   $('etfSub').textContent = `${t.tracking_index || '未配置指数'} · ${displayType(t.type)} · ${t.is_qdii ? 'QDII/跨境' : '普通/非QDII'}`;
+  const linked = $('linkedIndexAction');
+  if (linked) {
+    linked.innerHTML = t.tracking_index ? `<button class="link-index-btn" type="button">查看关联指数：${t.tracking_index}</button>` : '';
+    const btn = linked.querySelector('button');
+    if (btn) btn.onclick = () => goToLinkedIndex(t.tracking_index);
+  }
   setScore(s.score);
   $('verdict').textContent = `${s.level || '--'}：${s.action || ''}`;
   $('price').textContent = fmtNumber(p.price, 3);
@@ -684,7 +705,11 @@ function renderRawMetrics(data) {
 
   rows.push(metricItem('ETF代码', data.code || '--', t.name || ''));
   rows.push(metricItem('跟踪指数', t.tracking_index || '未配置'));
-  rows.push(metricItem('指数属性', indexNatureLabel(t), isCustomIndex(t) ? '行业/主题/策略/因子等非传统宽基' : '主流宽基或旗舰指数')); 
+  rows.push(metricItem('指数属性', indexNatureLabel(t), isCustomIndex(t) ? '行业/主题/策略/因子等非传统宽基' : '主流宽基或旗舰指数'));
+  rows.push(metricItem('基金成立时间', t.fund_inception_date || '待补充', t.fund_inception_source || t.fund_inception_error || ''));
+  rows.push(metricItem('指数发布日期', t.index_launch_date || '待补充', t.index_meta_note || ''));
+  rows.push(metricItem('指数基日', t.index_base_date || '待补充'));
+  rows.push(metricItem('编制方案', t.methodology_public ? '公开/待核验链接' : '待补充', t.methodology_summary || '')); 
   rows.push(metricItem('ETF类型', displayType(t.type))); 
   rows.push(metricItem('是否QDII', fmtBool(t.is_qdii), t.is_qdii ? '净值和折溢价可能滞后' : ''));
   rows.push(metricItem('是否跨境/港股相关', fmtBool(t.is_cross_border)));
@@ -707,6 +732,10 @@ function renderRawMetrics(data) {
   rows.push(metricItem('10年价格分位', fmtMaybePct(h.price_percentile_10y, 1)));
   rows.push(metricItem('20日均线', fmtMaybeNumber(h.ma20, 3)));
   rows.push(metricItem('60日均线', fmtMaybeNumber(h.ma60, 3)));
+  rows.push(metricItem('1年年化收益率', fmtMaybePct(h.annualized_return_1y, 1)));
+  rows.push(metricItem('3年年化收益率', fmtMaybePct(h.annualized_return_3y, 1)));
+  rows.push(metricItem('5年年化收益率', fmtMaybePct(h.annualized_return_5y, 1)));
+  rows.push(metricItem('10年年化收益率', fmtMaybePct(h.annualized_return_10y, 1)));
   rows.push(metricItem('近一年波动率', fmtMaybePct(h.annual_volatility_pct, 1)));
   rows.push(metricItem('近一年最大回撤', fmtMaybePct(h.max_drawdown_pct, 1)));
   rows.push(metricItem('历史价格天数', h.days ? `${h.days}天` : '暂无'));

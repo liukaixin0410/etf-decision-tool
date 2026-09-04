@@ -204,3 +204,10 @@ body[data-page="discover"] .index-page { display:none; }
 .review-box { background:#f8fafc; }
 .score-box { background:#eff6ff; border-color:#bfdbfe; }
 @media (max-width: 760px) { .discover-two-col { grid-template-columns:1fr; } }
+.methodology-box { margin-top:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; }
+.methodology-box strong { color:#1e3a8a; }
+.methodology-box p { margin:6px 0 0; color:#334155; line-height:1.55; }
+.methodology-box small { display:block; margin-top:6px; color:#64748b; line-height:1.4; }
+.linked-index-action { margin-top:10px; }
+.link-index-btn { width:auto; margin:0; padding:8px 12px; border-radius:999px; background:#eff6ff; color:#1e3a8a; border:1px solid #bfdbfe; font-size:13px; font-weight:800; }
+.link-index-btn:hover { background:#dbeafe; }

@@ -1,4 +1,5 @@
 const templates = require('./templates_data.json');
+const indexMetadata = require('./index_metadata.json');
 const UA = 'Mozilla/5.0 ETFDecisionTool/1.0';
 
 function nowIso(){ return new Date().toISOString(); }
@@ -142,6 +143,15 @@ function computeHistory(rows, current){
     return {pct, low:lo, high:hi, days:win.length};
   };
   const p1 = percentileFor(252), p2 = percentileFor(504), p3 = percentileFor(756), p5 = percentileFor(1260), p10 = percentileFor(2520);
+  function annualizedReturnFor(n, years){
+    if (closes.length < Math.min(n, 120)) return null;
+    const win = closes.slice(-Math.min(n, closes.length));
+    const start = win[0];
+    const end = price || win[win.length-1];
+    if (!start || start <= 0 || !end) return null;
+    const actualYears = Math.max(win.length / 252, 1/252);
+    return (Math.pow(end / start, 1 / Math.min(years, actualYears)) - 1) * 100;
+  }
   const rets=[]; for(let i=1;i<closes.length;i++){ if(closes[i-1]>0) rets.push(closes[i]/closes[i-1]-1); }
   const mean = rets.reduce((a,b)=>a+b,0)/(rets.length||1); const variance = rets.reduce((a,b)=>a+(b-mean)**2,0)/(rets.length||1);
   const vol = rets.length>2 ? Math.sqrt(variance)*Math.sqrt(252)*100 : null;
@@ -153,6 +163,10 @@ function computeHistory(rows, current){
     low_3y:p3.low, high_3y:p3.high, price_percentile_3y:p3.pct,
     low_5y:p5.low, high_5y:p5.high, price_percentile_5y:p5.pct,
     low_10y:p10.low, high_10y:p10.high, price_percentile_10y:p10.pct,
+    annualized_return_1y: annualizedReturnFor(252, 1),
+    annualized_return_3y: annualizedReturnFor(756, 3),
+    annualized_return_5y: annualizedReturnFor(1260, 5),
+    annualized_return_10y: annualizedReturnFor(2520, 10),
     annual_volatility_pct:vol, max_drawdown_pct:maxDd*100, ma20:avg(closes.slice(-20)), ma60:avg(closes.slice(-60)), last_history_date:rows[rows.length-1]?.date};
 }
 function scorePricePercentile(p){ if(p==null) return 45; if(p<=20) return 90; if(p<=40) return 75; if(p<=60) return 55; if(p<=80) return 35; return 15; }
@@ -186,6 +200,47 @@ function buildScore(template, quote, hist){
   const risks = Array.from(new Set([...(template.risk_tags||[]), st==='single_source'?'仅单一免费数据源可用':null, hist.annual_volatility_pct>25?'近一年波动率较高':null, hist.price_percentile_52w>70?'52周价格位置偏高':null, hist && hist.ok === false ? '历史行情不可用，价格分位/波动率/回撤不可用' : null].filter(Boolean)));
   return {score:Math.round(score*10)/10, score_reliable: !historyMissing, level, action, first_buy_ratio_pct:first, max_position_ratio_pct:max, components: Object.fromEntries(Object.entries(comps).map(([k,v])=>[k, Math.round(v*10)/10])), risk_tags:risks};
 }
+
+async function fetchFundInceptionCN(code){
+  if (!/^\d+$/.test(code)) return {date:null, source:null, error:null};
+  try {
+    const text = await fetchText(`https://fundf10.eastmoney.com/jbgk_${code}.html`, {'User-Agent': UA, 'Referer':'https://fundf10.eastmoney.com/'});
+    const m = text.match(/成立日期：\s*<span>([^<]+)<\/span>/);
+    if (m && m[1]) return {date:m[1].trim(), source:'eastmoney_fund_profile', error:null};
+    return {date:null, source:'eastmoney_fund_profile', error:'not found'};
+  } catch(e) {
+    return {date:null, source:'eastmoney_fund_profile', error:e.message};
+  }
+}
+async function enrichTemplateMeta(code, template){
+  const enriched = {...template};
+  const idxMeta = indexMetadata[template.tracking_index] || null;
+  if (idxMeta) {
+    enriched.index_launch_date = idxMeta.index_launch_date || null;
+    enriched.index_base_date = idxMeta.index_base_date || null;
+    enriched.index_meta_note = idxMeta.note || null;
+    enriched.methodology_public = idxMeta.methodology_public ?? true;
+    enriched.methodology_summary = idxMeta.methodology_summary || null;
+    enriched.methodology_url = idxMeta.methodology_url || '';
+    enriched.methodology_status = idxMeta.methodology_status || '';
+  } else {
+    enriched.index_launch_date = enriched.index_launch_date || null;
+    enriched.index_base_date = enriched.index_base_date || null;
+    enriched.index_meta_note = enriched.index_meta_note || '待补充：该指数成立/基日信息未接入模板';
+    enriched.methodology_public = enriched.methodology_public ?? true;
+    enriched.methodology_summary = enriched.methodology_summary || '编制方案公开信息待接入，当前仅使用ETF模板进行评分。';
+    enriched.methodology_url = enriched.methodology_url || '';
+    enriched.methodology_status = enriched.methodology_status || '待补官方编制方案链接';
+  }
+  if (!enriched.fund_inception_date) {
+    const fund = await fetchFundInceptionCN(code);
+    enriched.fund_inception_date = fund.date;
+    enriched.fund_inception_source = fund.source;
+    enriched.fund_inception_error = fund.error;
+  }
+  return enriched;
+}
+
 async function getQuote(code, template){
   const market = template.market || ( /^\d+$/.test(code) ? marketForCode(code) : 'us'); const quotes=[]; const errors=[];
   const fns = market==='us' ? [quoteNasdaqUS, quoteCnbcUS] : [c=>quoteTencentCN(c, market)];
@@ -199,7 +254,8 @@ async function getQuote(code, template){
 exports.handler = async (event) => {
   const code = ((event.queryStringParameters||{}).code || '').toUpperCase().trim();
   if(!code) return {statusCode:400, headers:{'Content-Type':'application/json'}, body:JSON.stringify({error:'missing code'})};
-  const template = templates[code] || {code, name:code, market:marketForCode(code), type:'growth', tracking_index:'未配置', manual_metrics:{}, risk_tags:['未配置模板，估值数据缺失']};
+  let template = templates[code] || {code, name:code, market:marketForCode(code), type:'growth', tracking_index:'未配置', manual_metrics:{}, risk_tags:['未配置模板，估值数据缺失']};
+  template = await enrichTemplateMeta(code, template);
   let quote, hist;
   try{ quote = await getQuote(code, template); }catch(e){ quote={status:'unavailable', reason:e.message, primary:null, quotes:[], errors:[{error:e.message}], market:template.market}; }
   try{ const rows = template.market==='us' ? await historyNasdaqUS(code) : await historyCN(code, template.market); hist=computeHistory(rows, quote.primary?.price); }catch(e){ hist={ok:false,error:e.message}; }

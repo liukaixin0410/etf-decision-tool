@@ -534,6 +534,78 @@
     ],
     "index_nature": "custom"
   },
+  "159901": {
+    "code": "159901",
+    "name": "深证100ETF易方达",
+    "market": "cn_sz",
+    "type": "broad",
+    "tracking_index": "深证100指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "159902": {
+    "code": "159902",
+    "name": "中小100ETF华夏",
+    "market": "cn_sz",
+    "type": "broad",
+    "tracking_index": "中小100指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "159903": {
+    "code": "159903",
+    "name": "深成ETF南方",
+    "market": "cn_sz",
+    "type": "broad",
+    "tracking_index": "深证成指",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
   "159905": {
     "code": "159905",
     "name": "红利ETF工银",
@@ -563,6 +635,56 @@
     ],
     "index_nature": "custom"
   },
+  "159909": {
+    "code": "159909",
+    "name": "TMT50ETF招商",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "TMT50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159910": {
+    "code": "159910",
+    "name": "基本面120ETF嘉实",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "基本面120指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "159915": {
     "code": "159915",
     "name": "创业板ETF易方达",
@@ -589,6 +711,56 @@
     "pool": "core",
     "category": "科技成长",
     "index_nature": "custom"
+  },
+  "159916": {
+    "code": "159916",
+    "name": "基本面ETF建信",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "基本面指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159918": {
+    "code": "159918",
+    "name": "中创400ETF嘉实",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "中创400指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "159919": {
     "code": "159919",
@@ -667,6 +839,30 @@
       "估值分位为模板值"
     ],
     "index_nature": "standard"
+  },
+  "159925": {
+    "code": "159925",
+    "name": "沪深300ETF南方",
+    "market": "cn_sz",
+    "type": "broad",
+    "tracking_index": "沪深300指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
   },
   "159928": {
     "code": "159928",
@@ -748,6 +944,106 @@
     "category": "科技成长",
     "index_nature": "custom"
   },
+  "159967": {
+    "code": "159967",
+    "name": "创业板成长ETF华夏",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "创业板指",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159977": {
+    "code": "159977",
+    "name": "创业板ETF天弘",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "创业板指",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159980": {
+    "code": "159980",
+    "name": "有色ETF大成",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "有色指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159981": {
+    "code": "159981",
+    "name": "能源化工ETF建信",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "能源化工指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "159992": {
     "code": "159992",
     "name": "创新药ETF银华",
@@ -775,6 +1071,31 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "159993": {
+    "code": "159993",
+    "name": "证券ETF鹏华",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "中证全指证券公司指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "金融地产周期",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "金融地产周期",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "159995": {
     "code": "159995",
@@ -831,6 +1152,56 @@
     ],
     "index_nature": "custom"
   },
+  "159997": {
+    "code": "159997",
+    "name": "电子ETF天弘",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "电子指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "159998": {
+    "code": "159998",
+    "name": "计算机ETF天弘",
+    "market": "cn_sz",
+    "type": "growth",
+    "tracking_index": "中证计算机主题指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "510050": {
     "code": "510050",
     "name": "上证50ETF华夏",
@@ -856,6 +1227,81 @@
     "pool": "core",
     "category": "宽基",
     "index_nature": "standard"
+  },
+  "510180": {
+    "code": "510180",
+    "name": "上证180ETF华安",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "上证180指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510210": {
+    "code": "510210",
+    "name": "上证指数ETF富国",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "上证指数指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510230": {
+    "code": "510230",
+    "name": "金融ETF国泰",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "金融指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "金融地产周期",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "金融地产周期",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "510300": {
     "code": "510300",
@@ -935,6 +1381,103 @@
     ],
     "index_nature": "standard"
   },
+  "510360": {
+    "code": "510360",
+    "name": "沪深300ETF广发",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "沪深300指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510380": {
+    "code": "510380",
+    "name": "沪深300ETF国寿",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "沪深300指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510390": {
+    "code": "510390",
+    "name": "沪深300ETF平安",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "沪深300指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510410": {
+    "code": "510410",
+    "name": "资源ETF博时",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "资源指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "510500": {
     "code": "510500",
     "name": "中证500ETF南方",
@@ -960,6 +1503,202 @@
     "pool": "core",
     "category": "宽基",
     "index_nature": "standard"
+  },
+  "510580": {
+    "code": "510580",
+    "name": "中证500ETF易方达",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "中证500指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510650": {
+    "code": "510650",
+    "name": "金融地产ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "金融地产指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "金融地产周期",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "金融地产周期",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510680": {
+    "code": "510680",
+    "name": "上证50ETF万家",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "上证50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510710": {
+    "code": "510710",
+    "name": "上证50ETF博时",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "上证50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "510760": {
+    "code": "510760",
+    "name": "上证指数ETF国泰",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "上证指数指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510770": {
+    "code": "510770",
+    "name": "G60创新ETF申万菱信",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "G60创新申万菱信指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510810": {
+    "code": "510810",
+    "name": "上海国企ETF汇添富",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "上海国企指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "510850": {
+    "code": "510850",
+    "name": "上证50ETF工银",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "上证50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
   },
   "510880": {
     "code": "510880",
@@ -1015,6 +1754,56 @@
       "溢价风险"
     ],
     "index_nature": "standard"
+  },
+  "511880": {
+    "code": "511880",
+    "name": "银华日利ETF",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "银华日利指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "511990": {
+    "code": "511990",
+    "name": "华宝添益ETF",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "华宝添益指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512000": {
     "code": "512000",
@@ -1095,6 +1884,56 @@
     ],
     "index_nature": "standard"
   },
+  "512070": {
+    "code": "512070",
+    "name": "证券保险ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证全指证券公司指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "金融地产周期",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "金融地产周期",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "512090": {
+    "code": "512090",
+    "name": "MSCIA股ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "MSCIA股指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "512100": {
     "code": "512100",
     "name": "中证1000ETF南方",
@@ -1120,6 +1959,31 @@
     "pool": "core",
     "category": "宽基",
     "index_nature": "standard"
+  },
+  "512160": {
+    "code": "512160",
+    "name": "MSCI中国A股ETF南方",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "MSCI中国A股指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512170": {
     "code": "512170",
@@ -1175,6 +2039,32 @@
     ],
     "index_nature": "custom"
   },
+  "512260": {
+    "code": "512260",
+    "name": "中证500低波动ETF华安",
+    "market": "cn_sh",
+    "type": "dividend_low_vol",
+    "tracking_index": "中证500指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "红利/红利低波",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "dividend_yield": 5.0,
+      "dividend_yield_percentile": 60,
+      "pe_percentile": 35,
+      "pb_percentile": 35,
+      "sustainability_score": 62,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "红利/红利低波",
+      "估值分位为模板值"
+    ]
+  },
   "512290": {
     "code": "512290",
     "name": "生物医药ETF国泰",
@@ -1201,6 +2091,31 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "512380": {
+    "code": "512380",
+    "name": "MSCI中国ETF银华",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "MSCI中国指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512400": {
     "code": "512400",
@@ -1257,6 +2172,105 @@
     "category": "科技成长",
     "index_nature": "custom"
   },
+  "512500": {
+    "code": "512500",
+    "name": "中证500ETF华夏",
+    "market": "cn_sh",
+    "type": "broad",
+    "tracking_index": "中证500指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "宽基",
+    "index_nature": "standard",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "宽基",
+      "估值分位为模板值"
+    ]
+  },
+  "512560": {
+    "code": "512560",
+    "name": "军工ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证军工指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "512580": {
+    "code": "512580",
+    "name": "环保ETF广发",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "环保指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "512600": {
+    "code": "512600",
+    "name": "消费ETF嘉实",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证主要消费指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "消费",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "消费",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "512660": {
     "code": "512660",
     "name": "军工ETF国泰",
@@ -1283,6 +2297,31 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "512670": {
+    "code": "512670",
+    "name": "国防ETF鹏华",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "国防指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512690": {
     "code": "512690",
@@ -1311,6 +2350,33 @@
     ],
     "index_nature": "custom"
   },
+  "512700": {
+    "code": "512700",
+    "name": "银行ETF南方",
+    "market": "cn_sh",
+    "type": "dividend",
+    "tracking_index": "银行指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "红利/红利低波",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "dividend_yield": 5.0,
+      "dividend_yield_percentile": 60,
+      "pe_percentile": 35,
+      "pb_percentile": 35,
+      "sustainability_score": 62,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "红利/红利低波",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "512720": {
     "code": "512720",
     "name": "计算机ETF国泰",
@@ -1337,6 +2403,31 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "512750": {
+    "code": "512750",
+    "name": "基本面50ETF嘉实",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "基本面50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512760": {
     "code": "512760",
@@ -1450,6 +2541,56 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "512950": {
+    "code": "512950",
+    "name": "央企改革ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "央企改革指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "512970": {
+    "code": "512970",
+    "name": "大湾区ETF平安",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "大湾区指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "512980": {
     "code": "512980",
@@ -2257,6 +3398,31 @@
     "category": "红利/红利低波",
     "index_nature": "custom"
   },
+  "515170": {
+    "code": "515170",
+    "name": "食品饮料ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "食品饮料指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "消费",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "消费",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "515180": {
     "code": "515180",
     "name": "红利ETF易方达",
@@ -2315,6 +3481,135 @@
     ],
     "index_nature": "custom"
   },
+  "515230": {
+    "code": "515230",
+    "name": "软件ETF国泰",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "软件指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "515280": {
+    "code": "515280",
+    "name": "银行龙头ETF",
+    "market": "cn_sh",
+    "type": "dividend",
+    "tracking_index": "银行龙头指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "红利/红利低波",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "dividend_yield": 5.0,
+      "dividend_yield_percentile": 60,
+      "pe_percentile": 35,
+      "pb_percentile": 35,
+      "sustainability_score": 62,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "红利/红利低波",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "515400": {
+    "code": "515400",
+    "name": "大数据ETF富国",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "大数据指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "515450": {
+    "code": "515450",
+    "name": "红利低波50ETF南方",
+    "market": "cn_sh",
+    "type": "dividend_low_vol",
+    "tracking_index": "红利低波50指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "红利/红利低波",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "dividend_yield": 5.0,
+      "dividend_yield_percentile": 60,
+      "pe_percentile": 35,
+      "pb_percentile": 35,
+      "sustainability_score": 62,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "红利/红利低波",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "515520": {
+    "code": "515520",
+    "name": "MSCI价值100ETF",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "MSCI价值100指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "515650": {
     "code": "515650",
     "name": "消费50ETF富国",
@@ -2369,6 +3664,31 @@
     ],
     "index_nature": "custom"
   },
+  "515800": {
+    "code": "515800",
+    "name": "中证800ETF汇添富",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "中证800指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "515880": {
     "code": "515880",
     "name": "通信ETF国泰",
@@ -2395,6 +3715,106 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "515900": {
+    "code": "515900",
+    "name": "央企创新ETF博时",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "央企创新指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516020": {
+    "code": "516020",
+    "name": "化工ETF华宝",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "化工指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516050": {
+    "code": "516050",
+    "name": "科技龙头ETF工银",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "科技龙头指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516070": {
+    "code": "516070",
+    "name": "低碳ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "低碳指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "516080": {
     "code": "516080",
@@ -2423,6 +3843,31 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "516100": {
+    "code": "516100",
+    "name": "金融科技ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "金融科技指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "516110": {
     "code": "516110",
@@ -2478,6 +3923,131 @@
     ],
     "index_nature": "custom"
   },
+  "516320": {
+    "code": "516320",
+    "name": "高端装备ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "高端装备指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516330": {
+    "code": "516330",
+    "name": "物联网ETF华泰柏瑞",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "物联网指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516350": {
+    "code": "516350",
+    "name": "芯片ETF易方达",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "芯片指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516360": {
+    "code": "516360",
+    "name": "新材料ETF华宝",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "新材料指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516500": {
+    "code": "516500",
+    "name": "生物科技ETF华夏",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "生物科技指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "科技成长",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "科技成长",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
   "516510": {
     "code": "516510",
     "name": "云计算ETF易方达",
@@ -2504,6 +4074,81 @@
       "定制指数基金"
     ],
     "index_nature": "custom"
+  },
+  "516550": {
+    "code": "516550",
+    "name": "农业ETF嘉实",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "农业指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "消费",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "消费",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516560": {
+    "code": "516560",
+    "name": "养老ETF华宝",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "养老指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
+  },
+  "516620": {
+    "code": "516620",
+    "name": "影视ETF国泰",
+    "market": "cn_sh",
+    "type": "growth",
+    "tracking_index": "影视指数",
+    "is_qdii": false,
+    "is_cross_border": false,
+    "expense_ratio": 0.6,
+    "fund_size_billion": 2.0,
+    "pool": "extended",
+    "category": "行业主题",
+    "index_nature": "custom",
+    "manual_metrics": {
+      "valuation_percentile": 50,
+      "earnings_trend_score": 55,
+      "policy_risk_score": 55,
+      "tracking_error": null
+    },
+    "risk_tags": [
+      "行业主题",
+      "估值分位为模板值",
+      "定制指数基金"
+    ]
   },
   "516640": {
     "code": "516640",
@@ -2852,7 +4497,9 @@
     ],
     "pool": "core",
     "category": "宽基",
-    "index_nature": "standard"
+    "index_nature": "standard",
+    "fund_inception_date": "2000-05-15",
+    "fund_inception_source": "template"
   },
   "QQQ": {
     "code": "QQQ",
@@ -2879,7 +4526,9 @@
     ],
     "pool": "core",
     "category": "科技成长",
-    "index_nature": "custom"
+    "index_nature": "custom",
+    "fund_inception_date": "1999-03-10",
+    "fund_inception_source": "template"
   },
   "QQQM": {
     "code": "QQQM",
@@ -2907,7 +4556,9 @@
     ],
     "pool": "core",
     "category": "科技成长",
-    "index_nature": "custom"
+    "index_nature": "custom",
+    "fund_inception_date": "2020-10-13",
+    "fund_inception_source": "template"
   },
   "SCHD": {
     "code": "SCHD",
@@ -2936,7 +4587,9 @@
     ],
     "pool": "core",
     "category": "红利/红利低波",
-    "index_nature": "custom"
+    "index_nature": "custom",
+    "fund_inception_date": "2011-10-20",
+    "fund_inception_source": "template"
   },
   "SPY": {
     "code": "SPY",
@@ -2962,7 +4615,9 @@
     ],
     "pool": "core",
     "category": "宽基",
-    "index_nature": "standard"
+    "index_nature": "standard",
+    "fund_inception_date": "1993-01-22",
+    "fund_inception_source": "template"
   },
   "VOO": {
     "code": "VOO",
@@ -2988,7 +4643,9 @@
     ],
     "pool": "core",
     "category": "宽基",
-    "index_nature": "standard"
+    "index_nature": "standard",
+    "fund_inception_date": "2010-09-07",
+    "fund_inception_source": "template"
   },
   "VTI": {
     "code": "VTI",
@@ -3014,6 +4671,8 @@
     ],
     "pool": "core",
     "category": "宽基",
-    "index_nature": "standard"
+    "index_nature": "standard",
+    "fund_inception_date": "2001-05-24",
+    "fund_inception_source": "template"
   }
 }

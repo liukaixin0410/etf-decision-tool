@@ -1,0 +1,785 @@
+{
+  "CRSP US Total Market Index": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "Dow Jones U.S. Dividend 100 Index": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "G60创新申万菱信指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "MSCIA股指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "MSCI中国A50互联互通指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "MSCI中国A股指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "MSCI中国指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "MSCI价值100指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "NASDAQ-100 Index": {
+    "index_launch_date": "1985-01-31",
+    "index_base_date": "1985-01-31",
+    "note": "常用美股指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "S&P 500 Index": {
+    "index_launch_date": "1957-03-04",
+    "index_base_date": "1941-1943",
+    "note": "常用美股指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "TMT50指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上海国企指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上证180指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上证50指数": {
+    "index_launch_date": "2004-01-02",
+    "index_base_date": "2003-12-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上证指数指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上证科创板50成份指数": {
+    "index_launch_date": "2020-07-22",
+    "index_base_date": "2019-12-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "上证红利指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中创400指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中华交易服务半导体芯片行业指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中小100指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证1000指数": {
+    "index_launch_date": "2014-10-17",
+    "index_base_date": "2004-12-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证500指数": {
+    "index_launch_date": "2007-01-15",
+    "index_base_date": "2004-12-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证5G通信主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证800指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证A500指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证主要消费指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证云计算与大数据主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证人工智能主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证传媒指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证光伏产业指数": {
+    "methodology_public": true,
+    "methodology_summary": "新能源主题指数：通常按新能源车、光伏、电池等产业链选样，需关注产能周期、价格战和技术迭代。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指半导体产品与设备指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指家用电器指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指房地产指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指汽车指数": {
+    "methodology_public": true,
+    "methodology_summary": "新能源主题指数：通常按新能源车、光伏、电池等产业链选样，需关注产能周期、价格战和技术迭代。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指证券公司指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全指通信设备指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全球中国互联网指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证全球中国教育主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证军工指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证创新药产业指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证动漫游戏指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证医疗指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证医药卫生指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证基建指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证数字经济主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证新能源指数": {
+    "methodology_public": true,
+    "methodology_summary": "新能源主题指数：通常按新能源车、光伏、电池等产业链选样，需关注产能周期、价格战和技术迭代。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证新能源汽车指数": {
+    "methodology_public": true,
+    "methodology_summary": "新能源主题指数：通常按新能源车、光伏、电池等产业链选样，需关注产能周期、价格战和技术迭代。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证旅游主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证海外中国互联网30指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证海外中国互联网50指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证消费50指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证煤炭指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证生物医药指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证申万有色金属指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证科技龙头指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证稀土产业指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证红利低波动指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证红利指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证美国50指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证计算机主题指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证酒指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "中证银行指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "低碳指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "养老指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "农业指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "创业板指": {
+    "index_launch_date": "2010-06-01",
+    "index_base_date": "2010-05-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "化工指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "华宝添益指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "国证半导体芯片指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "国证新能源车电池指数": {
+    "methodology_public": true,
+    "methodology_summary": "新能源主题指数：通常按新能源车、光伏、电池等产业链选样，需关注产能周期、价格战和技术迭代。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "国证芯片指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "国防指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "基本面120指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "基本面50指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "基本面指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "大数据指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "大湾区指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "央企创新指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "央企改革指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "影视指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "德国DAX指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生中国企业指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生互联网科技业指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生医疗保健指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生港股通高股息低波动指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "恒生科技指数": {
+    "index_launch_date": "2020-07-27",
+    "index_base_date": "2014-12-31",
+    "note": "常用港股指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "新材料指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "日经225指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "有色指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "标普500指数": {
+    "index_launch_date": "1957-03-04",
+    "index_base_date": "1941-1943",
+    "note": "常用美股指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "标普生物科技精选行业指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "沪深300医药卫生指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "沪深300指数": {
+    "index_launch_date": "2005-04-08",
+    "index_base_date": "2004-12-31",
+    "note": "常用宽基指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "法国CAC40指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "深证100指数": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "深证成指": {
+    "methodology_public": true,
+    "methodology_summary": "宽基/规模代表性指数：主要按市场代表性、规模、流动性等规则选样，用于衡量对应市场或板块整体表现。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "深证红利指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "港股科技指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "港股通100指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "港股通50指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "港股通医药卫生指数": {
+    "methodology_public": true,
+    "methodology_summary": "医药医疗主题指数：通常按医药、医疗器械、创新药或生物科技相关业务选样，需关注政策、集采和研发周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "港股通非银金融指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "物联网指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "环保指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "生物科技指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "电子指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "科创芯片指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "科技龙头指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "红利低波50指数": {
+    "methodology_public": true,
+    "methodology_summary": "红利/低波策略指数：通常按分红记录、股息率、波动率等因子筛选和加权，重点关注分红可持续性与行业集中。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "纳斯达克100指数": {
+    "index_launch_date": "1985-01-31",
+    "index_base_date": "1985-01-31",
+    "note": "常用美股指数日期模板",
+    "methodology_public": true,
+    "methodology_summary": "宽基市值/规模代表性指数：主要按规模、流动性和市场代表性选样，通常适合作为市场底仓参考。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "纳斯达克生物科技指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "纳斯达克科技市值加权指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "能源化工指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "芯片指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "资源指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "软件指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "金融地产指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "金融指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "金融科技指数": {
+    "methodology_public": true,
+    "methodology_summary": "科技成长/互联网主题指数：通常按行业或主题暴露选样，弹性较高，需重点关注估值分位、盈利趋势和政策/技术周期。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "银华日利指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "银行指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "银行龙头指数": {
+    "methodology_public": true,
+    "methodology_summary": "周期/金融/资源行业指数：通常按单一行业或产业链选样，周期属性强，适合作为卫星仓而非无脑底仓。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "食品饮料指数": {
+    "methodology_public": true,
+    "methodology_summary": "消费主题指数：通常按消费行业或细分消费赛道选样，需关注内需景气、估值和品牌/行业集中度。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  },
+  "高端装备指数": {
+    "methodology_public": true,
+    "methodology_summary": "主题/行业/策略指数：编制规则需结合指数公司公开方案核验，当前使用模板摘要辅助判断。",
+    "methodology_url": "",
+    "methodology_status": "已加规则摘要；官方编制方案链接待逐步补全"
+  }
+}
