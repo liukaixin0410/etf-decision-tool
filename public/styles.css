@@ -211,3 +211,10 @@ body[data-page="discover"] .index-page { display:none; }
 .linked-index-action { margin-top:10px; }
 .link-index-btn { width:auto; margin:0; padding:8px 12px; border-radius:999px; background:#eff6ff; color:#1e3a8a; border:1px solid #bfdbfe; font-size:13px; font-weight:800; }
 .link-index-btn:hover { background:#dbeafe; }
+.holdings-table { margin-top:8px; display:grid; gap:6px; }
+.holding-head, .rich-holding-row { display:grid; grid-template-columns: minmax(160px, 1.6fr) .7fr .9fr .7fr .8fr; gap:8px; align-items:center; }
+.holding-head { color:#64748b; font-size:12px; font-weight:800; padding:0 10px 2px; }
+.rich-holding-row { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:9px 10px; line-height:1.35; }
+.rich-holding-row span { color:#334155; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rich-holding-row strong { color:#1e3a8a; font-weight:800; }
+@media (max-width: 760px) { .holding-head { display:none; } .rich-holding-row { grid-template-columns:1fr 1fr; } .rich-holding-row span { grid-column:1 / -1; white-space:normal; } }

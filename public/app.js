@@ -51,7 +51,16 @@ function renderIndexCategoryOptions() {
 }
 function renderHoldings(holdings) {
   if (!holdings || !holdings.length) return '<div class="holding-empty">暂无Top 10持仓数据（部分海外ETF/免费源可能缺失）。</div>';
-  return `<div class="holdings-grid">${holdings.slice(0,10).map(h => `<div class="holding-row"><span>${h.rank}. ${h.name}</span><strong>${h.weight}</strong></div>`).join('')}</div>`;
+  return `<div class="holdings-table">
+    <div class="holding-head"><span>成分股</span><span>占比</span><span>1年价格分位</span><span>PE</span><span>PE分位</span></div>
+    ${holdings.slice(0,10).map(h => `<div class="holding-row rich-holding-row">
+      <span title="${h.code || ''}">${h.rank}. ${h.name}</span>
+      <strong>${h.weight || '--'}</strong>
+      <strong>${fmtMaybePct(h.price_percentile_1y, 1)}</strong>
+      <strong>${fmtMaybeNumber(h.pe, 2, '倍')}</strong>
+      <strong>${fmtMaybePct(h.pe_percentile, 1)}</strong>
+    </div>`).join('')}
+  </div>`;
 }
 
 function renderIndexDimensions(d) {
