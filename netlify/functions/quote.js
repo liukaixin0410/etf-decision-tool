@@ -143,6 +143,9 @@ function computeHistory(rows, current){
     return {pct, low:lo, high:hi, days:win.length};
   };
   const p1 = percentileFor(252), p2 = percentileFor(504), p3 = percentileFor(756), p5 = percentileFor(1260), p10 = percentileFor(2520);
+  const allLo = Math.min(...closes), allHi = Math.max(...closes);
+  const availablePct = allHi > allLo ? Math.max(0, Math.min(100, (price - allLo) / (allHi - allLo) * 100)) : null;
+  const availableYears = closes.length / 252;
   function annualizedReturnFor(n, years){
     if (closes.length < Math.min(n, 120)) return null;
     const win = closes.slice(-Math.min(n, closes.length));
@@ -151,6 +154,12 @@ function computeHistory(rows, current){
     if (!start || start <= 0 || !end) return null;
     const actualYears = Math.max(win.length / 252, 1/252);
     return (Math.pow(end / start, 1 / Math.min(years, actualYears)) - 1) * 100;
+  }
+  function annualizedSinceStart(){
+    const start = closes[0];
+    const end = price || closes[closes.length-1];
+    if (!start || start <= 0 || !end) return null;
+    return (Math.pow(end / start, 1 / Math.max(availableYears, 1/252)) - 1) * 100;
   }
   const rets=[]; for(let i=1;i<closes.length;i++){ if(closes[i-1]>0) rets.push(closes[i]/closes[i-1]-1); }
   const mean = rets.reduce((a,b)=>a+b,0)/(rets.length||1); const variance = rets.reduce((a,b)=>a+(b-mean)**2,0)/(rets.length||1);
@@ -163,10 +172,14 @@ function computeHistory(rows, current){
     low_3y:p3.low, high_3y:p3.high, price_percentile_3y:p3.pct,
     low_5y:p5.low, high_5y:p5.high, price_percentile_5y:p5.pct,
     low_10y:p10.low, high_10y:p10.high, price_percentile_10y:p10.pct,
+    price_percentile_available: availablePct,
+    available_years: availableYears,
+    earliest_history_date: rows[0]?.date,
     annualized_return_1y: annualizedReturnFor(252, 1),
     annualized_return_3y: annualizedReturnFor(756, 3),
     annualized_return_5y: annualizedReturnFor(1260, 5),
     annualized_return_10y: annualizedReturnFor(2520, 10),
+    annualized_return_available: annualizedSinceStart(),
     annual_volatility_pct:vol, max_drawdown_pct:maxDd*100, ma20:avg(closes.slice(-20)), ma60:avg(closes.slice(-60)), last_history_date:rows[rows.length-1]?.date};
 }
 function scorePricePercentile(p){ if(p==null) return 45; if(p<=20) return 90; if(p<=40) return 75; if(p<=60) return 55; if(p<=80) return 35; return 15; }
@@ -201,15 +214,21 @@ function buildScore(template, quote, hist){
   return {score:Math.round(score*10)/10, score_reliable: !historyMissing, level, action, first_buy_ratio_pct:first, max_position_ratio_pct:max, components: Object.fromEntries(Object.entries(comps).map(([k,v])=>[k, Math.round(v*10)/10])), risk_tags:risks};
 }
 
-async function fetchFundInceptionCN(code){
-  if (!/^\d+$/.test(code)) return {date:null, source:null, error:null};
+async function fetchFundProfileCN(code){
+  if (!/^\d+$/.test(code)) return {date:null, size:null, size_date:null, source:null, error:null};
   try {
     const text = await fetchText(`https://fundf10.eastmoney.com/jbgk_${code}.html`, {'User-Agent': UA, 'Referer':'https://fundf10.eastmoney.com/'});
-    const m = text.match(/成立日期：\s*<span>([^<]+)<\/span>/);
-    if (m && m[1]) return {date:m[1].trim(), source:'eastmoney_fund_profile', error:null};
-    return {date:null, source:'eastmoney_fund_profile', error:'not found'};
+    const dateMatch = text.match(/成立日期：\s*<span>([^<]+)<\/span>/);
+    const sizeMatch = text.match(/净资产规模：\s*<span>\s*([0-9.]+)\s*亿元\s*（截止至：([^）]+)）/);
+    return {
+      date: dateMatch?.[1]?.trim() || null,
+      size: sizeMatch?.[1] ? Number(sizeMatch[1]) : null,
+      size_date: sizeMatch?.[2]?.trim() || null,
+      source: 'eastmoney_fund_profile',
+      error: (!dateMatch && !sizeMatch) ? 'not found' : null
+    };
   } catch(e) {
-    return {date:null, source:'eastmoney_fund_profile', error:e.message};
+    return {date:null, size:null, size_date:null, source:'eastmoney_fund_profile', error:e.message};
   }
 }
 async function enrichTemplateMeta(code, template){
@@ -232,13 +251,51 @@ async function enrichTemplateMeta(code, template){
     enriched.methodology_url = enriched.methodology_url || '';
     enriched.methodology_status = enriched.methodology_status || '待补官方编制方案链接';
   }
-  if (!enriched.fund_inception_date) {
-    const fund = await fetchFundInceptionCN(code);
+  const fund = await fetchFundProfileCN(code);
+  if (!enriched.fund_inception_date && fund.date) {
     enriched.fund_inception_date = fund.date;
+    enriched.fund_inception_source = fund.source;
+  } else if (!enriched.fund_inception_date) {
     enriched.fund_inception_source = fund.source;
     enriched.fund_inception_error = fund.error;
   }
+  if (fund.size) {
+    const oldSize = Number(enriched.fund_size_billion || 0);
+    enriched.template_fund_size_billion = oldSize || null;
+    enriched.fund_size_billion = fund.size;
+    enriched.fund_size_source = fund.source;
+    enriched.fund_size_date = fund.size_date;
+    if (oldSize && Math.abs(fund.size - oldSize) / Math.max(oldSize, 1) > 0.3) {
+      enriched.fund_size_warning = `模板规模${oldSize}亿元与抓取规模${fund.size}亿元差异较大，已优先使用抓取值`;
+    }
+  } else {
+    enriched.fund_size_source = enriched.fund_size_source || 'template';
+    enriched.fund_size_error = fund.error;
+  }
   return enriched;
+}
+
+
+function buildDataQuality(template, quote, hist, score){
+  const checks = [
+    ['最新价', !!quote?.primary?.price],
+    ['历史行情', hist?.ok === true],
+    ['1年价格分位', hist?.price_percentile_52w != null],
+    ['3年价格分位', hist?.price_percentile_3y != null],
+    ['5年价格分位', hist?.price_percentile_5y != null],
+    ['基金规模', template?.fund_size_billion != null],
+    ['基金成立时间', !!template?.fund_inception_date],
+    ['指数发布日期/基日', !!(template?.index_launch_date || template?.index_base_date)],
+    ['估值/股息模板', !!(template?.manual_metrics && Object.keys(template.manual_metrics).length)],
+  ];
+  const available = checks.filter(x=>x[1]).map(x=>x[0]);
+  const missing = checks.filter(x=>!x[1]).map(x=>x[0]);
+  const warnings = [];
+  if (quote?.status === 'single_source') warnings.push('行情仅单一免费源可用');
+  if (hist?.ok === false) warnings.push('历史行情不可用，不输出买入建议');
+  if (template?.fund_size_warning) warnings.push(template.fund_size_warning);
+  if (template?.fund_size_error && !template?.fund_size_billion) warnings.push('基金规模抓取失败');
+  return {completeness_pct: Math.round(available.length / checks.length * 100), available, missing, warnings, score_reliable: score?.score_reliable !== false};
 }
 
 async function getQuote(code, template){
@@ -260,5 +317,6 @@ exports.handler = async (event) => {
   try{ quote = await getQuote(code, template); }catch(e){ quote={status:'unavailable', reason:e.message, primary:null, quotes:[], errors:[{error:e.message}], market:template.market}; }
   try{ const rows = template.market==='us' ? await historyNasdaqUS(code) : await historyCN(code, template.market); hist=computeHistory(rows, quote.primary?.price); }catch(e){ hist={ok:false,error:e.message}; }
   const score = buildScore(template, quote, hist);
-  return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':'*'}, body:JSON.stringify({code, template, quote, history_metrics:hist, score, fetched_at:nowIso(), disclaimer:'免费数据源仅供辅助判断；数据源冲突、过期或不可用时请勿依据本工具下单。'}, null, 2)};
+  const data_quality = buildDataQuality(template, quote, hist, score);
+  return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':'*'}, body:JSON.stringify({code, template, quote, history_metrics:hist, score, data_quality, fetched_at:nowIso(), disclaimer:'免费数据源仅供辅助判断；数据源冲突、过期或不可用时请勿依据本工具下单。'}, null, 2)};
 };

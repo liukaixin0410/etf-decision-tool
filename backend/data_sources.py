@@ -514,6 +514,12 @@ def compute_history_metrics(rows: List[Dict[str, Any]], current_price: Optional[
     p3 = percentile_for(756)
     p5 = percentile_for(1260)
     p10 = percentile_for(2520)
+    all_low = min(closes)
+    all_high = max(closes)
+    available_pct = None
+    if all_high > all_low and price is not None:
+        available_pct = max(0.0, min(100.0, (price - all_low) / (all_high - all_low) * 100))
+    available_years = len(closes) / 252
     def annualized_return_for(n, years):
         if len(closes) < min(n, 120):
             return None
@@ -524,6 +530,12 @@ def compute_history_metrics(rows: List[Dict[str, Any]], current_price: Optional[
             return None
         actual_years = max(len(win) / 252, 1/252)
         return (pow(end / start, 1 / min(years, actual_years)) - 1) * 100
+    def annualized_since_start():
+        start = closes[0]
+        end = price or closes[-1]
+        if not start or start <= 0 or not end:
+            return None
+        return (pow(end / start, 1 / max(available_years, 1/252)) - 1) * 100
     returns = []
     for a, b in zip(closes, closes[1:]):
         if a and a > 0 and b:
@@ -558,10 +570,14 @@ def compute_history_metrics(rows: List[Dict[str, Any]], current_price: Optional[
         "low_10y": p10["low"],
         "high_10y": p10["high"],
         "price_percentile_10y": p10["pct"],
+        "price_percentile_available": available_pct,
+        "available_years": available_years,
+        "earliest_history_date": rows[0].get("date"),
         "annualized_return_1y": annualized_return_for(252, 1),
         "annualized_return_3y": annualized_return_for(756, 3),
         "annualized_return_5y": annualized_return_for(1260, 5),
         "annualized_return_10y": annualized_return_for(2520, 10),
+        "annualized_return_available": annualized_since_start(),
         "annual_volatility_pct": vol,
         "max_drawdown_pct": max_dd * 100,
         "ma20": ma20,

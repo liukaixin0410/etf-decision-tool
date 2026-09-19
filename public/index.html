@@ -27,6 +27,7 @@
     <button id="detailPageBtn" class="page-tab" type="button">单只ETF详情</button>
     <button id="discoverPageBtn" class="page-tab" type="button">自动发现/待审核</button>
     <button id="indexPageBtn" class="page-tab" type="button">指数评分</button>
+    <button id="candidatePageBtn" class="page-tab" type="button">我的候选</button>
   </nav>
 
   <section class="top-actions">
@@ -108,12 +109,31 @@
       <div id="indexRankList" class="index-rank-list empty">暂无指数评分数据</div>
     </section>
 
+    <section class="panel wide candidate-panel page-section candidate-page" id="candidatePanel">
+      <div class="pool-head">
+        <div>
+          <h2>我的候选</h2>
+          <p>把感兴趣的 ETF 和指数加入候选池，用一张表横向比较差异。候选保存在当前浏览器本地。</p>
+        </div>
+        <button id="clearCandidatesBtn" class="secondary compact-btn">清空候选</button>
+      </div>
+      <div class="pool-filters candidate-filters">
+        <label><span>候选类型</span><select id="candidateTypeFilter"><option value="all">全部</option><option value="etf">ETF</option><option value="index">指数</option></select></label>
+        <label><span>搜索</span><input id="candidateSearch" placeholder="ETF代码/指数名称/类别" /></label>
+      </div>
+      <div id="candidateSummary" class="pool-summary">还没有候选。可在单只ETF详情或指数评分页点击“加入候选”。</div>
+      <div id="candidateList" class="candidate-list empty">暂无候选</div>
+      <h2 class="compare-title">候选横向对比</h2>
+      <div id="candidateCompare" class="candidate-compare empty">暂无可对比数据</div>
+    </section>
+
     <section class="panel result-panel page-section detail-page">
       <div class="result-head">
         <div>
           <h2 id="etfTitle">等待分析</h2>
           <p id="etfSub">请选择ETF后点击“抓取并判断”。</p>
           <div id="linkedIndexAction" class="linked-index-action"></div>
+          <div id="detailCandidateAction" class="linked-index-action"></div>
         </div>
         <div class="score-ring" id="scoreRing"><span id="scoreValue">--</span><small>分</small></div>
       </div>
@@ -133,6 +153,11 @@
     <section class="panel wide page-section detail-page">
       <h2>是否推荐买入</h2>
       <div id="recommendationDetails" class="recommendation-details empty">暂无数据</div>
+    </section>
+
+    <section class="panel wide page-section detail-page">
+      <h2>数据完整度</h2>
+      <div id="dataQuality" class="data-quality empty">暂无数据</div>
     </section>
 
     <section class="panel wide page-section detail-page">

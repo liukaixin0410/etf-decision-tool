@@ -218,3 +218,54 @@ body[data-page="discover"] .index-page { display:none; }
 .rich-holding-row span { color:#334155; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .rich-holding-row strong { color:#1e3a8a; font-weight:800; }
 @media (max-width: 760px) { .holding-head { display:none; } .rich-holding-row { grid-template-columns:1fr 1fr; } .rich-holding-row span { grid-column:1 / -1; white-space:normal; } }
+body[data-page="candidate"] .rank-page,
+body[data-page="candidate"] .detail-page,
+body[data-page="candidate"] .discover-page,
+body[data-page="candidate"] .index-page { display:none; }
+body[data-page="candidate"] .candidate-panel { grid-column: 1 / -1; }
+.candidate-list { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin-bottom:18px; }
+.candidate-card { display:grid; grid-template-columns: 1fr auto auto; gap:12px; align-items:center; background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:13px; }
+.candidate-card strong { display:block; color:#0f172a; font-size:16px; }
+.candidate-card p { margin:5px 0 0; color:#64748b; line-height:1.4; }
+.candidate-score { text-align:right; }
+.candidate-score span { display:block; font-size:20px; font-weight:900; color:#1e3a8a; }
+.candidate-score small { color:#64748b; }
+.mini-btn { width:auto; padding:8px 11px; margin:0; border-radius:999px; font-size:13px; }
+.compare-title { margin:16px 0 10px; }
+.candidate-compare { overflow:auto; border:1px solid #e2e8f0; border-radius:16px; background:#fff; }
+.compare-table { display:grid; grid-template-columns: 150px repeat(calc(var(--cols) - 1), minmax(150px, 1fr)); min-width: 680px; }
+.compare-cell { padding:10px; border-bottom:1px solid #eef2f7; border-right:1px solid #eef2f7; line-height:1.35; color:#334155; }
+.compare-head { background:#eff6ff; font-weight:900; color:#1e3a8a; position:sticky; top:0; }
+.compare-label { background:#f8fafc; font-weight:800; color:#475569; }
+.candidate-btn { width:auto; margin:0 8px 8px 0; padding:8px 12px; border-radius:999px; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; font-size:13px; font-weight:800; }
+.candidate-inline { margin-top:10px; }
+@media (max-width: 760px) { .candidate-card { grid-template-columns:1fr; } .candidate-score { text-align:left; } }
+body[data-page="candidate"] .rank-page,
+body[data-page="candidate"] .detail-page,
+body[data-page="candidate"] .discover-page,
+body[data-page="candidate"] .index-page { display:none; }
+body[data-page="candidate"] .candidate-panel { grid-column: 1 / -1; }
+.data-quality { display:grid; grid-template-columns: 150px 1fr; gap:14px; align-items:stretch; }
+.quality-head { background:#eff6ff; border:1px solid #bfdbfe; border-radius:16px; padding:14px; text-align:center; color:#1e3a8a; }
+.quality-head strong { display:block; font-size:34px; line-height:1; }
+.quality-head span { font-weight:800; font-size:13px; }
+.quality-body { background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:12px; line-height:1.6; }
+.quality-body p { margin:0 0 6px; }
+.quality-warning { color:#9a3412; }
+.candidate-list { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin-bottom:18px; }
+.candidate-card { display:grid; grid-template-columns: 1fr auto auto; gap:12px; align-items:center; background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:13px; }
+.candidate-card strong { display:block; color:#0f172a; font-size:16px; }
+.candidate-card p { margin:5px 0 0; color:#64748b; line-height:1.4; }
+.candidate-score { text-align:right; }
+.candidate-score span { display:block; font-size:20px; font-weight:900; color:#1e3a8a; }
+.candidate-score small { color:#64748b; }
+.mini-btn { width:auto; padding:8px 11px; margin:0; border-radius:999px; font-size:13px; }
+.compare-title { margin:16px 0 10px; }
+.candidate-compare { overflow:auto; border:1px solid #e2e8f0; border-radius:16px; background:#fff; }
+.compare-table { display:grid; grid-template-columns: 150px repeat(calc(var(--cols) - 1), minmax(150px, 1fr)); min-width:680px; }
+.compare-cell { padding:10px; border-bottom:1px solid #eef2f7; border-right:1px solid #eef2f7; color:#334155; line-height:1.35; }
+.compare-head { background:#eff6ff; font-weight:900; color:#1e3a8a; }
+.compare-label { background:#f8fafc; font-weight:800; color:#475569; }
+.candidate-btn { width:auto; margin:0 8px 8px 0; padding:8px 12px; border-radius:999px; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; font-size:13px; font-weight:800; }
+.candidate-inline { margin-top:10px; }
+@media (max-width:760px){ .data-quality { grid-template-columns:1fr; } .candidate-card { grid-template-columns:1fr; } .candidate-score { text-align:left; } }

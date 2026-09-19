@@ -3,6 +3,7 @@ let templates = {};
 let currentCode = '159545';
 let poolResults = [];
 let scanningPool = false;
+const CANDIDATE_KEY = 'etf_decision_candidates_v1';
 
 let indexResults = [];
 let scanningIndex = false;
@@ -163,12 +164,14 @@ function renderIndexRankList(items = indexResults) {
         </div>
       </div>
       <div class="rank-reason index-reason">${shortReason(d)}</div>
+      <div class="candidate-inline"><button class="candidate-btn" type="button" data-index-candidate="${idx}">☆ 加入指数候选</button></div>
       ${renderIndexDimensions(d)}
       <div class="methodology-box"><strong>编制方案摘要</strong><p>${t.methodology_summary || '编制方案信息待补充。'}</p><small>${t.methodology_status || ''}${t.methodology_url ? ` · ${t.methodology_url}` : ''}</small></div>
       <div class="holdings-title">Top 10 成分股/持仓占比</div>
       ${renderHoldings(d.holdings?.holdings || [])}
     </div>`;
   }).join('');
+  root.querySelectorAll('[data-index-candidate]').forEach(btn=>{ btn.onclick=()=>{ const i=Number(btn.dataset.indexCandidate); const item=list[i]; if(item){ upsertCandidate(snapshotIndexCandidate(item)); btn.textContent='已加入指数候选'; } }; });
 }
 async function scanIndexes() {
   if (scanningIndex) return;
@@ -431,6 +434,8 @@ function switchPage(page) {
   $('detailPageBtn')?.classList.toggle('active', page === 'detail');
   $('discoverPageBtn')?.classList.toggle('active', page === 'discover');
   $('indexPageBtn')?.classList.toggle('active', page === 'index');
+  $('candidatePageBtn')?.classList.toggle('active', page === 'candidate');
+  if (page === 'candidate') renderCandidates();
 }
 function recommendationBucket(score, status) {
   if (status === 'conflict' || status === 'unavailable' || score < 50) return 'avoid';
@@ -447,6 +452,53 @@ function shortReason(data) {
 function metricItem(label, value, note = '') {
   return `<div class="raw-item"><span>${label}</span><strong>${value}</strong>${note ? `<small>${note}</small>` : ''}</div>`;
 }
+
+function loadCandidates() {
+  try { return JSON.parse(localStorage.getItem(CANDIDATE_KEY) || '[]'); } catch(e) { return []; }
+}
+function saveCandidates(items) { localStorage.setItem(CANDIDATE_KEY, JSON.stringify(items)); }
+function candidateKey(item) { return `${item.type}:${item.type === 'index' ? item.indexName : item.code}`; }
+function upsertCandidate(item) {
+  const items = loadCandidates();
+  const key = candidateKey(item);
+  const idx = items.findIndex(x => candidateKey(x) === key);
+  const next = {...item, saved_at: new Date().toISOString()};
+  if (idx >= 0) items[idx] = {...items[idx], ...next}; else items.push(next);
+  saveCandidates(items);
+  renderCandidates();
+}
+function removeCandidate(key) { saveCandidates(loadCandidates().filter(x => candidateKey(x) !== key)); renderCandidates(); }
+function snapshotEtfCandidate(data) {
+  const t=data.template||{}, h=data.history_metrics||{}, s=data.score||{}, p=(data.quote||{}).primary||{};
+  return {type:'etf', code:data.code, name:t.name||data.code, indexName:t.tracking_index||'', category:categoryOf(t), market:marketLabel(t), indexNature:indexNatureLabel(t), score:s.score, level:s.level, price:p.price, fundSize:t.fund_size_billion, fundInception:t.fund_inception_date, indexLaunch:t.index_launch_date, pricePct1y:h.price_percentile_52w, pricePct2y:h.price_percentile_2y, pricePct3y:h.price_percentile_3y, pricePct5y:h.price_percentile_5y, pricePct10y:h.price_percentile_10y, availableYears:h.available_years, availableReturn:h.annualized_return_available, availablePct:h.price_percentile_available, annualReturn1y:h.annualized_return_1y, annualReturn3y:h.annualized_return_3y, annualReturn5y:h.annualized_return_5y, annualReturn10y:h.annualized_return_10y, volatility:h.annual_volatility_pct, maxDrawdown:h.max_drawdown_pct, pe:rollingPeValue(t), pePct:rollingPePercentile(t), isQdii:!!t.is_qdii, dataStatus:data.quote?.status||'', scoreReliable:s.score_reliable!==false};
+}
+function snapshotIndexCandidate(d) {
+  const t=d.representative||{}, h=d.history_metrics||{}, s=d.score||{};
+  return {type:'index', indexName:d.indexName, code:t.code, name:t.name||t.code, category:categoryOf(t), market:marketLabel(t), indexNature:indexNatureLabel(t), score:s.score, level:s.level, fundSize:t.fund_size_billion, fundInception:t.fund_inception_date, indexLaunch:t.index_launch_date, pricePct1y:h.price_percentile_52w, pricePct2y:h.price_percentile_2y, pricePct3y:h.price_percentile_3y, pricePct5y:h.price_percentile_5y, pricePct10y:h.price_percentile_10y, availableYears:h.available_years, availableReturn:h.annualized_return_available, availablePct:h.price_percentile_available, annualReturn1y:h.annualized_return_1y, annualReturn3y:h.annualized_return_3y, annualReturn5y:h.annualized_return_5y, annualReturn10y:h.annualized_return_10y, volatility:h.annual_volatility_pct, maxDrawdown:h.max_drawdown_pct, pe:rollingPeValue(t), pePct:rollingPePercentile(t), dataStatus:d.quote?.status||'', sameIndexEtfs:(d.etfs||[]).map(x=>x.code).join(' / '), scoreReliable:s.score_reliable!==false};
+}
+function renderCandidates() {
+  const root=$('candidateList'), compare=$('candidateCompare'), summary=$('candidateSummary');
+  if (!root || !compare) return;
+  const type=$('candidateTypeFilter')?.value || 'all';
+  const text=($('candidateSearch')?.value || '').trim().toLowerCase();
+  const items=loadCandidates().filter(x=>{
+    if (type !== 'all' && x.type !== type) return false;
+    if (text) {
+      const hay=`${x.type} ${x.code||''} ${x.name||''} ${x.indexName||''} ${x.category||''} ${x.indexNature||''}`.toLowerCase();
+      if (!hay.includes(text)) return false;
+    }
+    return true;
+  }).sort((a,b)=>Number(b.score||0)-Number(a.score||0));
+  if (summary) summary.textContent=`当前候选 ${items.length} 个；数据为加入候选时的快照。`;
+  if (!items.length) { root.className='candidate-list empty'; root.textContent='暂无候选'; compare.className='candidate-compare empty'; compare.textContent='暂无可对比数据'; return; }
+  root.className='candidate-list';
+  root.innerHTML=items.map(x=>{ const key=candidateKey(x); const title=x.type==='index'?x.indexName:`${x.code} ${x.name}`; return `<div class="candidate-card"><div><strong>${title}</strong><p>${x.type==='index'?'指数':'ETF'} · ${x.category||'--'} · ${x.market||'--'} · ${x.indexNature||'--'}</p></div><div class="candidate-score"><span>${fmtNumber(x.score,1)}</span><small>${x.scoreReliable?(x.level||'--'):'数据不足'}</small></div><button class="secondary mini-btn" data-remove="${key}" type="button">移除</button></div>`; }).join('');
+  root.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>removeCandidate(btn.dataset.remove));
+  const metrics=[['类型',x=>x.type==='index'?'指数':'ETF'],['代码/代表ETF',x=>x.code||'--'],['跟踪指数',x=>x.indexName||'--'],['类别',x=>x.category||'--'],['市场',x=>x.market||'--'],['指数属性',x=>x.indexNature||'--'],['评分',x=>fmtNumber(x.score,1)],['推荐',x=>x.scoreReliable?(x.level||'--'):'数据不足'],['基金规模',x=>x.fundSize==null?'--':`${fmtNumber(x.fundSize,2)}亿`],['基金成立',x=>x.fundInception||'--'],['指数发布日期',x=>x.indexLaunch||'--'],['1年价格分位',x=>fmtMaybePct(x.pricePct1y,1)],['2年价格分位',x=>fmtMaybePct(x.pricePct2y,1)],['3年价格分位',x=>fmtMaybePct(x.pricePct3y,1)],['5年价格分位',x=>fmtMaybePct(x.pricePct5y,1)],['10年价格分位',x=>fmtMaybePct(x.pricePct10y,1)],['可用历史年限',x=>fmtMaybeNumber(x.availableYears,2,'年')],['可用历史分位',x=>fmtMaybePct(x.availablePct,1)],['可用历史年化',x=>fmtMaybePct(x.availableReturn,1)],['1年年化',x=>fmtMaybePct(x.annualReturn1y,1)],['3年年化',x=>fmtMaybePct(x.annualReturn3y,1)],['5年年化',x=>fmtMaybePct(x.annualReturn5y,1)],['10年年化',x=>fmtMaybePct(x.annualReturn10y,1)],['波动率',x=>fmtMaybePct(x.volatility,1)],['最大回撤',x=>fmtMaybePct(x.maxDrawdown,1)],['PE',x=>fmtMaybeNumber(x.pe,2,'倍')],['PE分位',x=>fmtMaybePct(x.pePct,1)],['数据状态',x=>x.scoreReliable?(x.dataStatus||'--'):'数据不足']];
+  compare.className='candidate-compare';
+  compare.innerHTML=`<div class="compare-table" style="--cols:${items.length+1}"><div class="compare-cell compare-head">维度</div>${items.map(x=>`<div class="compare-cell compare-head">${x.type==='index'?x.indexName:x.code}</div>`).join('')}${metrics.map(([label,fn])=>`<div class="compare-cell compare-label">${label}</div>${items.map(x=>`<div class="compare-cell">${fn(x)}</div>`).join('')}`).join('')}</div>`;
+}
+
 
 function getPeerGroup(code, t) {
   const c = String(code || '').toUpperCase();
@@ -672,6 +724,12 @@ function renderResult(data) {
     const btn = linked.querySelector('button');
     if (btn) btn.onclick = () => goToLinkedIndex(t.tracking_index);
   }
+  const candidateAction = $('detailCandidateAction');
+  if (candidateAction) {
+    candidateAction.innerHTML = `<button class="candidate-btn" type="button">☆ 加入ETF候选</button>`;
+    const cbtn = candidateAction.querySelector('button');
+    if (cbtn) cbtn.onclick = () => { upsertCandidate(snapshotEtfCandidate(data)); cbtn.textContent = '已加入ETF候选'; };
+  }
   setScore(s.score);
   $('verdict').textContent = `${s.level || '--'}：${s.action || ''}`;
   $('price').textContent = fmtNumber(p.price, 3);
@@ -685,6 +743,7 @@ function renderResult(data) {
   $('dataStatus').textContent = `数据状态：${q.status || '--'}；原因：${q.reason || '--'}；源间误差：${gap}；抓取时间：${data.fetched_at || '--'}`;
   renderRisks(s.risk_tags || []);
   renderRecommendation(data);
+  renderDataQuality(data);
   renderRawMetrics(data);
   renderComponents(s.components || {});
   renderSources(q);
@@ -699,6 +758,20 @@ function renderRisks(tags) {
     span.textContent = x;
     root.appendChild(span);
   });
+}
+
+
+function renderDataQuality(data) {
+  const root=$('dataQuality');
+  if (!root) return;
+  const dq=data.data_quality||{};
+  const pct=Number(dq.completeness_pct);
+  const reliable=dq.score_reliable!==false;
+  const available=dq.available||[];
+  const missing=dq.missing||[];
+  const warnings=dq.warnings||[];
+  root.className='data-quality';
+  root.innerHTML=`<div class="quality-score ${reliable?'ok':'bad'}"><span>数据完整度</span><strong>${Number.isFinite(pct)?pct:'--'}%</strong><small>${reliable?'评分可参考':'评分不完整，不建议据此下单'}</small></div><div class="quality-list"><strong>已获取</strong><p>${available.length?available.join('、'):'暂无'}</p></div><div class="quality-list"><strong>缺失/不足</strong><p>${missing.length?missing.join('、'):'无'}</p></div><div class="quality-list warn"><strong>警告</strong><p>${warnings.length?warnings.join('；'):'无'}</p></div>`;
 }
 
 function renderRawMetrics(data) {
@@ -967,9 +1040,12 @@ $('rankPageBtn').onclick = () => switchPage('rank');
 $('detailPageBtn').onclick = () => switchPage('detail');
 $('discoverPageBtn').onclick = () => switchPage('discover');
 $('indexPageBtn').onclick = () => switchPage('index');
+$('candidatePageBtn').onclick = () => switchPage('candidate');
 ['poolFilter','categoryFilter','marketFilter','indexNatureFilter','scoreFilter','recommendFilter','poolSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'poolSearch' ? 'input' : 'change', () => renderPoolRankList()); });
 ['discoverModeFilter','discoverStatusFilter','discoverPoolFilter','discoverCategoryFilter','discoverMarketFilter','discoverNatureFilter','discoverQualityFilter','discoverSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'discoverSearch' ? 'input' : 'change', () => renderDiscoverList()); });
 ['indexCategoryFilter','indexMarketFilter','indexNaturePageFilter','indexScoreFilter','indexRecommendFilter','indexSearch'].forEach(id => { const el = $(id); if (el) el.addEventListener(id === 'indexSearch' ? 'input' : 'change', () => renderIndexRankList()); });
+$('clearCandidatesBtn').onclick = () => { saveCandidates([]); renderCandidates(); };
+['candidateTypeFilter','candidateSearch'].forEach(id=>{ const el=$(id); if(el) el.addEventListener(id==='candidateSearch'?'input':'change',()=>renderCandidates()); });
 $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') analyze($('codeInput').value); });
 (async function init() {
   await loadTemplates();
